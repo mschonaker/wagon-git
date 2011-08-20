@@ -1,0 +1,10 @@
+<component-set>
+	<components>
+		<component>
+			<role>org.apache.maven.wagon.Wagon</role>
+			<role-hint>git</role-hint>
+			<implementation>ar.com.synergian.wagongit.GitWagon</implementation>
+			<instantiation-strategy>per-lookup</instantiation-strategy>
+		</component>
+	</components>
+</component-set>
