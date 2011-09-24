@@ -1,7 +1,4 @@
-<project
-	xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>ar.com.synergian</groupId>
@@ -41,24 +38,24 @@
 	</build>
 
 	<scm>
-		<connection>scm:git:git@github.com:mschonaker/wagon-git.git</connection>
+		<connection>scm:git:ssh://git@github.com/synergian/wagon-git.git</connection>
 	</scm>
 
 	<distributionManagement>
 		<repository>
-			<id>releases</id>
-			<name>repo</name>
-			<url>git:releases://git@github.com:mschonaker/wagon-git.git</url>
+			<id>synergian-private</id>
+			<name>Synergian Private Releases</name>
+			<url>git:releases://git@github.com:synergian/private-maven-repo.git</url>
 		</repository>
 		<snapshotRepository>
-			<id>releases</id>
-			<name>repo</name>
-			<url>git:snapshots://git@github.com:mschonaker/wagon-git.git</url>
+			<id>synergian-private</id>
+			<name>Synergian Private Snapshots</name>
+			<url>git:snapshots://git@github.com:synergian/private-maven-repo.git</url>
 		</snapshotRepository>
 		<site>
-			<id>releases</id>
-			<name>repo</name>
-			<url>git:gh-pages://git@github.com:mschonaker/wagon-git.git</url>
+			<id>wagon-git-site</id>
+			<name>wagon-git github homepage</name>
+			<url>git:gh-pages://git@github.com:synergian/wagon-git.git</url>
 		</site>
 	</distributionManagement>
 
