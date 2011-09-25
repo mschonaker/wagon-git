@@ -3,6 +3,7 @@ package ar.com.synergian.wagongit;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Properties;
 
 import org.apache.maven.scm.log.DefaultLog;
 import org.apache.maven.scm.log.ScmLogger;
@@ -34,6 +35,13 @@ public class GitWagon extends AbstractWagon {
 	 * Required by plexus. But ignored.
 	 */
 	public void setScpExecutable(String scpExecutable) {
+		// Ignore.
+	}
+
+	/**
+	 * Required by plexus. But ignored.
+	 */
+	public void setHttpHeaders(Properties httpHeaders) {
 		// Ignore.
 	}
 
