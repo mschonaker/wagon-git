@@ -2,11 +2,14 @@ package ar.com.synergian.wagongit;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Date;
 
 import org.apache.maven.scm.ScmException;
 import org.apache.maven.scm.log.ScmLogger;
 import org.apache.maven.scm.provider.git.gitexe.command.GitCommandLineUtils;
+import org.apache.maven.wagon.ConnectionException;
 import org.apache.maven.wagon.resource.Resource;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.cli.CommandLineUtils.StringStreamConsumer;
@@ -23,9 +26,9 @@ public class GitBackend {
 	private final StringStreamConsumer stderr = new StringStreamConsumer();
 	private final ScmLogger log;
 
-	public GitBackend(File workDir, String url, ScmLogger log) {
+	public GitBackend(File workDir, String url, ScmLogger log)
+			throws GitException {
 		this.log = log;
-		this.workDir = workDir;
 
 		url = url.substring("git:".length());
 		int i = url.indexOf(':');
@@ -37,8 +40,24 @@ public class GitBackend {
 			remote = url.substring(i + 3, url.length());
 		}
 
-		// TODO validate branch characters and strip remote.
+		// Create a directory under given workDir for each URL, using the
+		// URL. Do this in order to support multiple repos corresponding to
+		// different remotes.
+		this.workDir = new File(workDir, encodePath(remote));
+		this.workDir.mkdir();
+		if (!this.workDir.exists())
+			throw new GitException(
+					"Unable to create working directory");
 
+		// TODO validate branch characters and strip remote.
+	}
+
+	private String encodePath(String path) throws GitException {
+		try {
+			return URLEncoder.encode(path, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			throw new GitException("Unable to encode path", e);
+		}
 	}
 
 	private boolean run(String command) throws GitException {

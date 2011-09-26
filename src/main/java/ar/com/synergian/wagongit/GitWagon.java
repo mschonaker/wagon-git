@@ -45,21 +45,26 @@ public class GitWagon extends AbstractWagon {
 		// Ignore.
 	}
 
+	/**
+	 * Directory containing the build files.
+	 * 
+	 * @parameter expression="\${project.build.directory}"
+	 */
+	private File buildDirectory;
+
 	protected void openConnectionInternal() throws ConnectionException,
 			AuthenticationException {
 
 		if (git == null) {
-			// TODO sofcode "target" or use temp dir.
-			File workDir = new File("target/wagon-git");
+			File workDir = new File(buildDirectory, "wagon-git");
 			workDir.mkdirs();
 
 			if (!workDir.exists())
 				throw new ConnectionException(
 						"Unable to create working directory");
 
-			git = new GitBackend(workDir, getRepository().getUrl(), log);
-
 			try {
+				git = new GitBackend(workDir, getRepository().getUrl(), log);
 				git.pullAll();
 			} catch (Exception e) {
 				throw new ConnectionException("Unable to pull git repository: "
