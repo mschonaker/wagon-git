@@ -4,12 +4,12 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.apache.maven.scm.ScmException;
 import org.apache.maven.scm.log.ScmLogger;
 import org.apache.maven.scm.provider.git.gitexe.command.GitCommandLineUtils;
-import org.apache.maven.wagon.ConnectionException;
 import org.apache.maven.wagon.resource.Resource;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.cli.CommandLineUtils.StringStreamConsumer;
@@ -46,8 +46,7 @@ public class GitBackend {
 		this.workDir = new File(workDir, encodePath(remote));
 		this.workDir.mkdir();
 		if (!this.workDir.exists())
-			throw new GitException(
-					"Unable to create working directory");
+			throw new GitException("Unable to create working directory");
 
 		// TODO validate branch characters and strip remote.
 	}
@@ -85,7 +84,7 @@ public class GitBackend {
 
 			int exitCode = GitCommandLineUtils.execute(cl, stdout, stderr, log);
 
-			log.info("RAN: " + sb.toString() + " / $? = " + exitCode);
+			log.debug("RAN: " + sb.toString() + " / $? = " + exitCode);
 
 			return exitCode == 0;
 		} catch (ScmException e) {
@@ -161,10 +160,12 @@ public class GitBackend {
 			if (!run("add", new String[] { "." }))
 				throw new GitException("Unable to add files");
 
+			String timestamp = new SimpleDateFormat().format(new Date());
+
 			if (!run("commit", new String[] {
 					"-m",
 					"[wagon-git]" + " commit to branch " + branch + " "
-							+ new Date().toGMTString() }))
+							+ timestamp }))
 				throw new GitException("Unable to commit files");
 
 			if (!run("push", new String[] { "origin", branch }))

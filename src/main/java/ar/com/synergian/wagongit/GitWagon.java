@@ -131,7 +131,7 @@ public class GitWagon extends AbstractWagon {
 			AuthorizationException {
 
 		// TODO implement
-		System.out.println("WARN: getFileList not implemented");
+		log.warn("getFileList not implemented");
 
 		return null;
 	}
@@ -174,7 +174,7 @@ public class GitWagon extends AbstractWagon {
 			ResourceDoesNotExistException, AuthorizationException {
 
 		// TODO implement.
-		System.out.println("WARN: getIfNewer not implemented");
+		log.warn("getIfNewer not implemented");
 
 		return true;
 	}
