@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Maven">
+  
+  <body>
+  
+    <links>
+      <item name="GitHub Project Home" href="https://github.com/synergian/wagon-git" />
+      <item name="Synergian" href="http://synergian.com.ar"/>
+    </links>
+
+    <menu name="Maven 2.0">
+      <item name="Introduction" href="index.html"/>
+      <item name="Usage" href="usage.html"/>
+    </menu>
+
+    <menu ref="reports"/>
+
+  </body>
+</project>

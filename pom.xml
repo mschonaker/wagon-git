@@ -1,4 +1,7 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project
+  xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>ar.com.synergian</groupId>
@@ -11,6 +14,41 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
+
+  <inceptionYear>2011</inceptionYear>
+  <developers>
+    <developer>
+      <name>Martin Schonaker</name>
+      <email>mschonaker@synergian.com.ar</email>
+    </developer>
+    <developer>
+      <name>Vidal Santiago Martinez</name>
+      <email>smartinez@synergian.com.ar</email>
+    </developer>
+    <developer>
+      <name>Emilio Bustos</name>
+      <email>ebustos@synergian.com.ar</email>
+    </developer>
+  </developers>
+  <description>
+    A Maven component (a wagon) that enables deploying artifacts in remote Git SCM repositories.
+  </description>
+  <issueManagement>
+    <system>GitHub Issue Tracker</system>
+    <url>https://github.com/synergian/wagon-git/issues</url>
+  </issueManagement>
+  <url>http://synergian.github.com/wagon-git/</url>
+  <organization>
+    <name>Synergian</name>
+    <url>http://synergian.com.ar</url>
+  </organization>
+  <licenses>
+    <license>
+      <name>Apache License 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
 
   <dependencies>
     <dependency>
@@ -70,6 +108,7 @@
   </build>
 
   <scm>
+    <url>https://github.com/synergian/wagon-git</url>
     <connection>scm:git:ssh://git@github.com/synergian/wagon-git.git</connection>
   </scm>
 
@@ -77,12 +116,12 @@
     <repository>
       <id>synergian-private</id>
       <name>Synergian Private Releases</name>
-      <url>git:releases://git@github.com:synergian/private-maven-repo.git</url>
+      <url>git:releases://git@github.com:synergian/wagon-git.git</url>
     </repository>
     <snapshotRepository>
       <id>synergian-private</id>
       <name>Synergian Private Snapshots</name>
-      <url>git:snapshots://git@github.com:synergian/private-maven-repo.git</url>
+      <url>git:snapshots://git@github.com:synergian/wagon-git.git</url>
     </snapshotRepository>
     <site>
       <id>wagon-git-site</id>

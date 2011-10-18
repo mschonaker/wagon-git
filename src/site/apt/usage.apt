@@ -1,0 +1,194 @@
+Quickstart
+
+* Configuring a Project to use wagon-git
+
+** Adding wagon-git to a project
+
+*** Setting up the repository
+
+    Add Synergian repos to your pom where wagon-git is released. 
+
+---
+...
+<repositories>
+  <repository>
+    <id>synergian-repo</id>
+    <url>https://raw.github.com/synergian/maven-repo/releases</url>
+  </repository>
+...
+</repositories>
+...
+---
+
+*** Extensions section
+
+    Add the following extension to your build tag:
+
+---
+...
+<build>
+...
+  <extensions>
+    <extension>
+      <groupId>ar.com.synergian</groupId>
+	  <artifactId>wagon-git</artifactId>
+	  <version>0.1.2</version>
+    </extension>
+  </extensions>
+...
+</build>
+---
+
+** Configuring remote repositories
+
+*** Configuring remote repositories for GitHub
+
+---
+<distributionManagement>
+  <repository>
+    <id>your-repo-id</id>
+    <name>Your Repo Name</name>
+	<url>git:releases://git@github.com:yourgithubusername/your-github-repo.git</url>
+  </repository>
+</distributionManagement>
+---
+
+*** Adding a second repository for snapshot releases
+
+---
+<distributionManagement>
+  <repository>
+    <id>your-repo-id</id>
+    <name>Your Repo Name</name>
+	<url>git:releases://git@github.com:yourgithubusername/your-github-repo.git</url>
+  </repository>
+  <snapshotRepository>
+    <id>your-snapshot-repo-id</id>
+    <name>Your Snapshot Repo Name</name>
+	<url>git:snapshots://git@github.com:yourgithubusername/your-github-repo2.git</url>
+  </snapshotRepository>
+</distributionManagement>
+---
+
+*** Adding a third repository for site deployment
+
+---
+<distributionManagement>
+  <repository>
+    <id>your-repo-id</id>
+    <name>Your Repo Name</name>
+	<url>git:releases://git@github.com:yourgithubusername/your-github-repo.git</url>
+  </repository>
+  <snapshotRepository>
+    <id>your-snapshot-repo-id</id>
+    <name>Your Snapshot Repo Name</name>
+	<url>git:snapshots://git@github.com:yourgithubusername/your-github-repo2.git</url>
+  </snapshotRepository>
+  <site>
+    <id>your-site-repo-id</id>
+	<url>git:site://git@github.com:yourgithubusername/your-github-repo2.git</url>
+  </site>
+</distributionManagement>
+---
+
+*** GitHub Pages
+
+    Just use the gh-pages branch:
+    
+---
+  ...
+  <site>
+    <id>your-site-repo-id</id>
+	<url>git:gh-pages://git@github.com:yourgithubusername/your-github-repo2.git</url>
+  </site>
+  ...
+---
+
+* Consuming a project deployed in a GitHub repository
+
+** Adding the repositories
+
+---
+    ...
+	<repositories>
+	    ...
+		<repository>
+			<id>your-repo-id</id>
+			<name>Synergian Private Releases</name>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<!-- 
+			   distributionManagement url was
+			   <url>git:your-branch://git@github.com:yourgithubusername/your-github-repo.git</url>
+			-->
+			<url>https://raw.github.com/yourgithubusername/your-github-repo.git/your-branch</url>
+		</repository>
+		...
+---
+
+* Consuming a project deployed in a private GitHub repository
+
+** Configuring settings.xml for authentication
+
+   Proceed the same way, but add basic authentication in your settings.xml
+
+---
+<settings>
+	...
+	<servers>
+		<server>
+			<id>your-repo-id</id>
+			<username>yourgithubusername</username>
+			<password>yourgithubpassword</password>
+		</server>
+		...
+	</servers>
+	...
+</settings> 
+---
+
+   Here's a workaround since HTTP basic authentication doesn't seem to be working with default https wagon provider (at least for maven 2.2.1).
+   
+   The workaround consists of injecting the basic authentication header, computing it manually as follows:
+   
+---
+<settings>
+	...
+	<servers>
+		<server>
+			<id>your-repo-id</id>
+			<configuration>
+				<httpHeaders>
+					<property>
+						<name>Authorization</name>
+						<value>BASIC-AUTH HEADER VALUE</value>
+					</property>
+				</httpHeaders>
+			</configuration>
+		</server>
+		...
+	</servers>
+	...
+</settings> 
+---
+
+    You can compute BASIC-AUTH HEADER VALUE with this bash script, for instance:
+
+---
+#!/bin/bash
+#
+# A small command that computes "Authorization" HTTP-header for basic
+# authentication.
+
+read -p "Username: " username
+read -s -p "Password: " password
+echo ""
+encoded=`echo -n "$username:$password" | base64`
+echo "Basic $encoded"
+---
+
+    Notice that the value is NOT a hash value, it's the Base-64 encoded value of your password. Don't publish it. 
