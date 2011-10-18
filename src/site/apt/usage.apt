@@ -13,7 +13,7 @@ Quickstart
 <repositories>
   <repository>
     <id>synergian-repo</id>
-    <url>https://raw.github.com/synergian/maven-repo/releases</url>
+    <url>https://raw.github.com/synergian/wagon-git/releases</url>
   </repository>
 ...
 </repositories>
@@ -32,7 +32,7 @@ Quickstart
     <extension>
       <groupId>ar.com.synergian</groupId>
 	  <artifactId>wagon-git</artifactId>
-	  <version>0.1.2</version>
+	  <version>0.1.4</version>
     </extension>
   </extensions>
 ...
