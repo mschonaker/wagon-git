@@ -134,7 +134,7 @@ Quickstart
 
 ** Configuring settings.xml for authentication
 
-   Proceed the same way, but add basic authentication in your settings.xml
+   Proceed the same way, but add basic authentication in your Maven settings.xml (usually located at your $MAVEN_HOME directory, check out {{http://maven.apache.org/settings.html}} for a full guide).
 
 ---
 <settings>
