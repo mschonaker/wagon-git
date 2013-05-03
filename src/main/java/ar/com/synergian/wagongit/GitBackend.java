@@ -26,8 +26,7 @@ public class GitBackend {
 	private final StringStreamConsumer stderr = new StringStreamConsumer();
 	private final ScmLogger log;
 
-	public GitBackend(File workDir, String url, ScmLogger log)
-			throws GitException {
+	public GitBackend(File workDir, String url, ScmLogger log) throws GitException {
 		this.log = log;
 
 		url = url.substring("git:".length());
@@ -67,8 +66,7 @@ public class GitBackend {
 
 		try {
 
-			Commandline cl = GitCommandLineUtils.getBaseGitCommandLine(workDir,
-					command);
+			Commandline cl = GitCommandLineUtils.getBaseGitCommandLine(workDir, command);
 
 			if (args != null) {
 				for (int i = 0; i < args.length; i++)
@@ -88,8 +86,7 @@ public class GitBackend {
 
 			return exitCode == 0;
 		} catch (ScmException e) {
-			throw new GitException("Couldn't run command " + command + ": "
-					+ e.getMessage(), e);
+			throw new GitException("Couldn't run command " + command + ": " + e.getMessage(), e);
 		}
 	}
 
@@ -119,8 +116,7 @@ public class GitBackend {
 		if (!run("show-ref", new String[] { "refs/remotes/origin/" + branch })) {
 
 			// git symbolic-ref HEAD refs/heads/<branch>
-			if (!run("symbolic-ref", new String[] { "HEAD",
-					"refs/heads/" + branch }))
+			if (!run("symbolic-ref", new String[] { "HEAD", "refs/heads/" + branch }))
 				throw new GitException("Unable to create branch");
 
 			// rm .git/index
@@ -138,8 +134,7 @@ public class GitBackend {
 		if (!run("show-ref", new String[] { "refs/heads/" + branch })) {
 
 			// git checkout -b <branch> origin/<branch>
-			if (!run("checkout", new String[] { "-b", branch,
-					"origin/" + branch }))
+			if (!run("checkout", new String[] { "-b", branch, "origin/" + branch }))
 				throw new GitException("Unable to checkout branch");
 
 		}
@@ -162,10 +157,7 @@ public class GitBackend {
 
 			String timestamp = new SimpleDateFormat().format(new Date());
 
-			if (!run("commit", new String[] {
-					"-m",
-					"[wagon-git]" + " commit to branch " + branch + " "
-							+ timestamp }))
+			if (!run("commit", new String[] { "-m", "[wagon-git]" + " commit to branch " + branch + " " + timestamp }))
 				throw new GitException("Unable to commit files");
 
 			if (!run("push", new String[] { "origin", branch }))
@@ -188,11 +180,9 @@ public class GitBackend {
 			FileUtils.copyFile(remote, localFile);
 	}
 
-	public void putDirectory(File sourceDirectory, String destinationDirectory)
-			throws IOException {
+	public void putDirectory(File sourceDirectory, String destinationDirectory) throws IOException {
 
-		FileUtils.copyDirectoryStructure(sourceDirectory, new File(workDir,
-				destinationDirectory));
+		FileUtils.copyDirectoryStructure(sourceDirectory, new File(workDir, destinationDirectory));
 
 		dirty = true;
 	}

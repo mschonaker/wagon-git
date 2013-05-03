@@ -52,8 +52,7 @@ public class GitWagon extends AbstractWagon {
 	 */
 	private File buildDirectory;
 
-	protected void openConnectionInternal() throws ConnectionException,
-			AuthenticationException {
+	protected void openConnectionInternal() throws ConnectionException, AuthenticationException {
 
 		log.debug("Invoked openConnectionInternal()");
 
@@ -62,15 +61,18 @@ public class GitWagon extends AbstractWagon {
 			workDir.mkdirs();
 
 			if (!workDir.exists())
-				throw new ConnectionException(
-						"Unable to create working directory");
+				throw new ConnectionException("Unable to create working directory");
 
 			try {
-				git = new GitBackend(workDir, getRepository().getUrl(), log);
+				String remote = getRepository().getUrl();
+
+				if (remote.endsWith("/"))
+					remote = remote.substring(0, remote.length() - 1);
+
+				git = new GitBackend(workDir, remote, log);
 				git.pullAll();
 			} catch (Exception e) {
-				throw new ConnectionException("Unable to pull git repository: "
-						+ e.getMessage(), e);
+				throw new ConnectionException("Unable to pull git repository: " + e.getMessage(), e);
 			}
 		}
 	}
@@ -82,8 +84,7 @@ public class GitWagon extends AbstractWagon {
 		try {
 			git.pushAll();
 		} catch (Exception e) {
-			throw new ConnectionException("Unable to push git repostory: "
-					+ e.getMessage(), e);
+			throw new ConnectionException("Unable to push git repostory: " + e.getMessage(), e);
 		}
 	}
 
@@ -92,12 +93,9 @@ public class GitWagon extends AbstractWagon {
 		super.finalize();
 	}
 
-	public void put(File source, String destination)
-			throws TransferFailedException, ResourceDoesNotExistException,
-			AuthorizationException {
+	public void put(File source, String destination) throws TransferFailedException, ResourceDoesNotExistException, AuthorizationException {
 
-		log.debug("Invoked put(" + source.getAbsolutePath() + ", "
-				+ destination + ")");
+		log.debug("Invoked put(" + source.getAbsolutePath() + ", " + destination + ")");
 
 		String resourceName = StringUtils.replace(destination, "\\", "/");
 		Resource resource = new Resource(resourceName);
@@ -115,12 +113,9 @@ public class GitWagon extends AbstractWagon {
 		firePutCompleted(resource, source);
 	}
 
-	public void get(String resourceName, File localFile)
-			throws TransferFailedException, ResourceDoesNotExistException,
-			AuthorizationException {
+	public void get(String resourceName, File localFile) throws TransferFailedException, ResourceDoesNotExistException, AuthorizationException {
 
-		log.debug("Invoked get(" + resourceName + ", "
-				+ localFile.getAbsolutePath() + ")");
+		log.debug("Invoked get(" + resourceName + ", " + localFile.getAbsolutePath() + ")");
 
 		Resource resource = new Resource(resourceName);
 
@@ -137,9 +132,7 @@ public class GitWagon extends AbstractWagon {
 		fireGetCompleted(resource, localFile);
 	}
 
-	public List getFileList(String destinationDirectory)
-			throws TransferFailedException, ResourceDoesNotExistException,
-			AuthorizationException {
+	public List getFileList(String destinationDirectory) throws TransferFailedException, ResourceDoesNotExistException, AuthorizationException {
 
 		log.debug("Invoked getFileList(" + destinationDirectory + ")");
 
@@ -149,8 +142,7 @@ public class GitWagon extends AbstractWagon {
 		return null;
 	}
 
-	public boolean resourceExists(String resourceName)
-			throws TransferFailedException, AuthorizationException {
+	public boolean resourceExists(String resourceName) throws TransferFailedException, AuthorizationException {
 
 		log.debug("Invoked resourceExists(" + resourceName + ")");
 
@@ -165,15 +157,11 @@ public class GitWagon extends AbstractWagon {
 		return true;
 	}
 
-	public void putDirectory(File sourceDirectory, String destinationDirectory)
-			throws TransferFailedException, ResourceDoesNotExistException,
-			AuthorizationException {
+	public void putDirectory(File sourceDirectory, String destinationDirectory) throws TransferFailedException, ResourceDoesNotExistException, AuthorizationException {
 
-		log.debug("Invoked putDirectory(" + sourceDirectory.getAbsolutePath()
-				+ ", " + destinationDirectory + ")");
+		log.debug("Invoked putDirectory(" + sourceDirectory.getAbsolutePath() + ", " + destinationDirectory + ")");
 
-		String resourceName = StringUtils.replace(destinationDirectory, "\\",
-				"/");
+		String resourceName = StringUtils.replace(destinationDirectory, "\\", "/");
 		Resource resource = new Resource(resourceName);
 
 		firePutInitiated(resource, sourceDirectory);
@@ -190,12 +178,9 @@ public class GitWagon extends AbstractWagon {
 		firePutCompleted(resource, sourceDirectory);
 	}
 
-	public boolean getIfNewer(String resourceName, File destination,
-			long timestamp) throws TransferFailedException,
-			ResourceDoesNotExistException, AuthorizationException {
+	public boolean getIfNewer(String resourceName, File destination, long timestamp) throws TransferFailedException, ResourceDoesNotExistException, AuthorizationException {
 
-		log.debug("Invoked getIfNewer(" + resourceName + ", "
-				+ destination.getAbsolutePath() + ", " + timestamp + ")");
+		log.debug("Invoked getIfNewer(" + resourceName + ", " + destination.getAbsolutePath() + ", " + timestamp + ")");
 
 		// TODO implement.
 		log.warn("getIfNewer not implemented");
