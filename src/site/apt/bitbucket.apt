@@ -1,0 +1,142 @@
+Configuring wagon-git for Bitbucket
+
+* Configuring your distribution repositories
+
+** Adding a single repository for releases
+
++--
+<distributionManagement>
+  <repository>
+    <id>your-repo-id</id>
+    <name>Your Repo Name</name>
+	<url>git:releases://git@bitbucket.org:yourbitbucketusername/your-bitbucket-repo.git</url>
+  </repository>
+</distributionManagement>
++--
+
+** Adding a second repository for snapshot releases
+
++--
+<distributionManagement>
+  <repository>
+    <id>your-repo-id</id>
+    <name>Your Repo Name</name>
+	<url>git:releases://git@bitbucket.org:yourbitbucketusername/your-bitbucket-repo.git</url>
+  </repository>
+  <snapshotRepository>
+    <id>your-snapshot-repo-id</id>
+    <name>Your Snapshot Repo Name</name>
+	<url>git:snapshots://git@bitbucket.org:yourbitbucketusername/your-bitbucket-repo2.git</url>
+  </snapshotRepository>
+</distributionManagement>
++--
+
+** Adding a third repository for site deployment
+
++--
+<distributionManagement>
+  <repository>
+    <id>your-repo-id</id>
+    <name>Your Repo Name</name>
+	<url>git:releases://git@bitbucket.org:yourbitbucketusername/your-bitbucket-repo.git</url>
+  </repository>
+  <snapshotRepository>
+    <id>your-snapshot-repo-id</id>
+    <name>Your Snapshot Repo Name</name>
+	<url>git:snapshots://git@bitbucket.org:yourbitbucketusername/your-bitbucket-repo.git</url>
+  </snapshotRepository>
+  <site>
+    <id>your-site-repo-id</id>
+	<url>git:site://git@bitbucket.org:yourbitbucketusername/your-bitbucket-repo.git</url>
+  </site>
+</distributionManagement>
++--
+
+* Consuming artifacts deployed in a Bitbucket repository
+
+** Adding the repositories
+
++--
+    ...
+	<repositories>
+	    ...
+		<repository>
+			<id>your-repo-id</id>
+			<name>Your Repo Name</name>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<!-- 
+			   distributionManagement url was
+			   <url>git:your-branch://git@bitbucket.org:yourbitbucketusername/your-bitbucket-repo.git</url>
+			-->
+			<url>https://api.bitbucket.org/1.0/repositories/yourbitbucketusername/your-bitbucket-repo/raw/your-branch</url>
+		</repository>
+		...
++--
+
+** Bitbucket Private Repositories
+
+   Proceed the same way, but add basic authentication in your Maven settings.xml (usually located at your $MAVEN_HOME directory, check out {{http://maven.apache.org/settings.html}} for a full guide).
+
++--
+<settings>
+	...
+	<servers>
+		<server>
+			<id>your-repo-id</id>
+			<username>yourbitbucketusername</username>
+			<password>yourbitbucketpassword</password>
+		</server>
+		...
+	</servers>
+	...
+</settings> 
++--
+
+*** Maven 2.2.1 Workaround for HTTP Basic auth
+
+   Here's a workaround since HTTP basic authentication doesn't seem to be working with default https wagon provider (at least for maven 2.2.1).
+   
+   The workaround consists of injecting the basic authentication header, computing it manually as follows:
+   
++--
+<settings>
+	...
+	<servers>
+		<server>
+			<id>your-repo-id</id>
+			<configuration>
+				<httpHeaders>
+					<property>
+						<name>Authorization</name>
+						<value>BASIC-AUTH HEADER VALUE</value>
+					</property>
+				</httpHeaders>
+			</configuration>
+		</server>
+		...
+	</servers>
+	...
+</settings> 
++--
+
+    You can compute BASIC-AUTH HEADER VALUE with this bash script, for instance:
+
++--
+#!/bin/bash
+#
+# A small command that computes "Authorization" HTTP-header for basic
+# authentication.
+
+read -p "Username: " username
+read -s -p "Password: " password
+echo ""
+encoded=`echo -n "$username:$password" | base64`
+echo "Basic $encoded"
++--
+
+    Notice that the value is NOT a hash value, it's the Base-64 encoded value of your password. Don't publish it. 

@@ -9,4 +9,9 @@ Features
     
     * Enables to configure different Git branches for releases, snapshots and site.
     
-    * Can create branches independently (useful for GitHub gh-pages branches).
+    * Enables to use regular <<{{{http://github.com}Github}}>> Git repositories as Maven repositories (<<public or private>>).
+    
+    * Enables to use regular <<{{{http://bitbucket.org}Bitbucket}}>> Git repositories as Maven repositories (<<public or private>>).
+    
+    * Can create "orphan" branches, without parent branch (useful for {{{http://pages.github.com/}GitHub Pages}} <<<gh-pages>>> branches).
+    

@@ -1,30 +1,24 @@
 Quickstart
 
-* Configuring a Project to use wagon-git
+* Add Synergian repos to your <<<pom.xml>>> where <<<wagon-git>>> is usually released. 
 
-** Adding wagon-git to a project
-
-*** Setting up the repository
-
-    Add Synergian repos to your pom where wagon-git is released. 
-
----
++--
 ...
-<repositories>
-  <repository>
+<pluginRepositories>
+  <pluginRepository>
     <id>synergian-repo</id>
     <url>https://raw.github.com/synergian/wagon-git/releases</url>
-  </repository>
+  </pluginRepository>
 ...
-</repositories>
+</pluginRepositories>
 ...
----
++--
 
-*** Extensions section
+* Extensions section
 
-    Add the following extension to your build tag:
+    Add the following extension to your <<<build>>> tag:
 
----
++--
 ...
 <build>
 ...
@@ -37,158 +31,26 @@ Quickstart
   </extensions>
 ...
 </build>
----
++--
 
-** Configuring remote repositories
+* NOTE: Parts in the Repositories URLs
 
-*** Configuring remote repositories for GitHub
+    In the following configuration you'll URLs as the one in this example:
 
----
-<distributionManagement>
-  <repository>
-    <id>your-repo-id</id>
-    <name>Your Repo Name</name>
-	<url>git:releases://git@github.com:yourgithubusername/your-github-repo.git</url>
-  </repository>
-</distributionManagement>
----
++--
+<url>git:releases://git@github.com:synergian/wagon-git.git</url>
++--
 
-*** Adding a second repository for snapshot releases
+     * <<"git">> is the extension enabled by this plugin.
+     
+     * <<"releases">> is the name of the <<branch>> in the target repository to use.
+     
+     * <<"git@github.com:synergian">> git standard domain plus username.
+     
+     * <<"wagon-git.git">> the target repository. 
 
----
-<distributionManagement>
-  <repository>
-    <id>your-repo-id</id>
-    <name>Your Repo Name</name>
-	<url>git:releases://git@github.com:yourgithubusername/your-github-repo.git</url>
-  </repository>
-  <snapshotRepository>
-    <id>your-snapshot-repo-id</id>
-    <name>Your Snapshot Repo Name</name>
-	<url>git:snapshots://git@github.com:yourgithubusername/your-github-repo2.git</url>
-  </snapshotRepository>
-</distributionManagement>
----
+* Next steps
 
-*** Adding a third repository for site deployment
-
----
-<distributionManagement>
-  <repository>
-    <id>your-repo-id</id>
-    <name>Your Repo Name</name>
-	<url>git:releases://git@github.com:yourgithubusername/your-github-repo.git</url>
-  </repository>
-  <snapshotRepository>
-    <id>your-snapshot-repo-id</id>
-    <name>Your Snapshot Repo Name</name>
-	<url>git:snapshots://git@github.com:yourgithubusername/your-github-repo2.git</url>
-  </snapshotRepository>
-  <site>
-    <id>your-site-repo-id</id>
-	<url>git:site://git@github.com:yourgithubusername/your-github-repo2.git</url>
-  </site>
-</distributionManagement>
----
-
-*** GitHub Pages
-
-    Just use the gh-pages branch:
+    You've already included the plugin as part of your project, now proceed to {{{./github.html}Github}} or {{{./bitbucket.html}Bitbucket}} configurations.
     
----
-  ...
-  <site>
-    <id>your-site-repo-id</id>
-	<url>git:gh-pages://git@github.com:yourgithubusername/your-github-repo2.git</url>
-  </site>
-  ...
----
-
-* Consuming a project deployed in a GitHub repository
-
-** Adding the repositories
-
----
-    ...
-	<repositories>
-	    ...
-		<repository>
-			<id>your-repo-id</id>
-			<name>Synergian Private Releases</name>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-			<!-- 
-			   distributionManagement url was
-			   <url>git:your-branch://git@github.com:yourgithubusername/your-github-repo.git</url>
-			-->
-			<url>https://raw.github.com/yourgithubusername/your-github-repo.git/your-branch</url>
-		</repository>
-		...
----
-
-* Consuming a project deployed in a private GitHub repository
-
-** Configuring settings.xml for authentication
-
-   Proceed the same way, but add basic authentication in your Maven settings.xml (usually located at your $MAVEN_HOME directory, check out {{http://maven.apache.org/settings.html}} for a full guide).
-
----
-<settings>
-	...
-	<servers>
-		<server>
-			<id>your-repo-id</id>
-			<username>yourgithubusername</username>
-			<password>yourgithubpassword</password>
-		</server>
-		...
-	</servers>
-	...
-</settings> 
----
-
-   Here's a workaround since HTTP basic authentication doesn't seem to be working with default https wagon provider (at least for maven 2.2.1).
-   
-   The workaround consists of injecting the basic authentication header, computing it manually as follows:
-   
----
-<settings>
-	...
-	<servers>
-		<server>
-			<id>your-repo-id</id>
-			<configuration>
-				<httpHeaders>
-					<property>
-						<name>Authorization</name>
-						<value>BASIC-AUTH HEADER VALUE</value>
-					</property>
-				</httpHeaders>
-			</configuration>
-		</server>
-		...
-	</servers>
-	...
-</settings> 
----
-
-    You can compute BASIC-AUTH HEADER VALUE with this bash script, for instance:
-
----
-#!/bin/bash
-#
-# A small command that computes "Authorization" HTTP-header for basic
-# authentication.
-
-read -p "Username: " username
-read -s -p "Password: " password
-echo ""
-encoded=`echo -n "$username:$password" | base64`
-echo "Basic $encoded"
----
-
-    Notice that the value is NOT a hash value, it's the Base-64 encoded value of your password. Don't publish it. 
+    Notice that, although out of the scope of this guide, you could use this plugin with any Git repository as long as it gets published through HTTP or HTTPS access and honors the repository layout.  

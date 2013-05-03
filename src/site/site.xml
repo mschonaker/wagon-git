@@ -8,9 +8,11 @@
       <item name="Synergian" href="http://synergian.com.ar"/>
     </links>
 
-    <menu name="Maven 2.0">
+    <menu name="wagon-git">
       <item name="Introduction" href="index.html"/>
-      <item name="Usage" href="usage.html"/>
+      <item name="Basic configuration" href="usage.html"/>
+      <item name="Github usage" href="github.html"/>
+      <item name="Bitbucket usage" href="bitbucket.html"/>
     </menu>
 
     <menu ref="reports"/>
