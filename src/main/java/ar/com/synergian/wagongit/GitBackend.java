@@ -8,7 +8,6 @@ import java.util.Date;
 import org.apache.maven.scm.ScmException;
 import org.apache.maven.scm.log.ScmLogger;
 import org.apache.maven.scm.provider.git.gitexe.command.GitCommandLineUtils;
-import org.apache.maven.wagon.resource.Resource;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.cli.CommandLineUtils.StringStreamConsumer;
 import org.codehaus.plexus.util.cli.Commandline;
@@ -55,10 +54,9 @@ public class GitBackend {
 			remote = url.substring(i + 3, url.length());
 		}
 
-		this.workDir = new File(workDir, Utils.hashPath(remote));
-		this.workDir.mkdir();
+		this.workDir = workDir;
 		if (!this.workDir.exists())
-			throw new GitException("Unable to create working directory");
+			throw new GitException("Invalid directory");
 
 	}
 
@@ -112,7 +110,7 @@ public class GitBackend {
 			if (!run("remote", new String[] { "add", "origin", remote }))
 				throw new GitException("git remote failed");
 
-			if (!run("fetch"))
+			if (!run("fetch", new String[] { "--progress" }))
 				throw new GitException("git fetch failed");
 		}
 
@@ -161,10 +159,10 @@ public class GitBackend {
 
 			String timestamp = new SimpleDateFormat().format(new Date());
 
-			if (!run("commit", new String[] { "-m", "[wagon-git]" + " commit to branch " + branch + " " + timestamp }))
+			if (!run("commit", new String[] { "--allow-empty", "-m", "[wagon-git]" + " commit to branch " + branch + " " + timestamp }))
 				throw new GitException("Unable to commit files");
 
-			if (!run("push", new String[] { "origin", branch }))
+			if (!run("push", new String[] { "--progress", "origin", branch }))
 				throw new GitException("Unable to push files");
 		}
 

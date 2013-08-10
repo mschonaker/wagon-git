@@ -64,19 +64,19 @@ public class GitWagon extends AbstractWagon {
 	protected void openConnectionInternal() throws ConnectionException, AuthenticationException {
 
 		log.debug("Invoked openConnectionInternal()");
-
+		
 		if (git == null) {
 			try {
-
-				File workDir = Utils.createCheckoutDirectory();
-
-				if (!workDir.mkdirs())
-					throw new ConnectionException("Unable to create working directory");
 
 				String remote = getRepository().getUrl();
 
 				if (remote.endsWith("/"))
 					remote = remote.substring(0, remote.length() - 1);
+
+				File workDir = Utils.createCheckoutDirectory(remote);
+
+				if (!workDir.exists() || !workDir.isDirectory() || !workDir.canWrite())
+					throw new ConnectionException("Unable to create working directory");
 
 				git = new GitBackend(workDir, remote, log);
 				git.pullAll();
@@ -201,7 +201,6 @@ public class GitWagon extends AbstractWagon {
 
 		try {
 			git.putDirectory(sourceDirectory, destinationDirectory);
-			git.pushAll();
 		} catch (Exception e) {
 			fireTransferError(resource, e, TransferEvent.REQUEST_PUT);
 			throw new TransferFailedException("Unable to put file", e);

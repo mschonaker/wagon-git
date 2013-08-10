@@ -5,28 +5,18 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.text.DecimalFormat;
-import java.util.Random;
 
 public final class Utils {
 
 	private Utils() {
 	}
 
-	public static File createCheckoutDirectory() {
-		File checkoutDirectory;
+	public static File createCheckoutDirectory(String path) throws GitException {
 
-		DecimalFormat fmt = new DecimalFormat("#####");
+		File dir = new File(System.getProperty("java.io.tmpdir"), "wagon-git-" + hashPath(path));
+		dir.mkdirs();
 
-		Random rand = new Random(System.currentTimeMillis() + Runtime.getRuntime().freeMemory());
-
-		do {
-
-			checkoutDirectory = new File(System.getProperty("java.io.tmpdir"), "wagon-git-" + fmt.format(Math.abs(rand.nextInt())));
-
-		} while (checkoutDirectory.exists());
-
-		return checkoutDirectory;
+		return dir;
 	}
 
 	private static String sha1(String input) throws NoSuchAlgorithmException {
@@ -46,7 +36,7 @@ public final class Utils {
 	 * this in order to support multiple repos corresponding to different
 	 * remotes.
 	 */
-	public static String hashPath(String path) throws GitException {
+	private static String hashPath(String path) throws GitException {
 		try {
 
 			return sha1(path);
