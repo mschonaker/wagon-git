@@ -19,7 +19,7 @@ import org.codehaus.plexus.util.StringUtils;
 
 public class GitWagon extends AbstractWagon {
 
-	private final ScmLogger log = new DefaultLog();
+	private final ScmLogger log = new GitWagonLog(Utils.getBooleanEnvironmentProperty("wagon.git.debug"));
 
 	// FIXME check the scope this makes this class thread unsafe.
 	private GitBackend git = null;

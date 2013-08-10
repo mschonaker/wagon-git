@@ -2,8 +2,6 @@ package ar.com.synergian.wagongit;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -22,9 +20,27 @@ public class GitBackend {
 	private final String branch;
 	private boolean dirty = false;
 
-	private final StringStreamConsumer stdout = new StringStreamConsumer();
-	private final StringStreamConsumer stderr = new StringStreamConsumer();
 	private final ScmLogger log;
+
+	private final StringStreamConsumer stdout = new StringStreamConsumer() {
+
+		public void consumeLine(String line) {
+
+			log.info("[git] " + line);
+
+		}
+
+	};
+
+	private final StringStreamConsumer stderr = new StringStreamConsumer() {
+
+		public void consumeLine(String line) {
+
+			log.info("[git] " + line);
+
+		}
+
+	};
 
 	public GitBackend(File workDir, String url, ScmLogger log) throws GitException {
 		this.log = log;
@@ -80,9 +96,9 @@ public class GitBackend {
 
 	private boolean isValidRepo() {
 
-		// TODO is this correct?
 		// Where are assuming that this was checked out by this wagon.
 		return new File(workDir, ".git").exists();
+
 	}
 
 	public void pullAll() throws GitException {

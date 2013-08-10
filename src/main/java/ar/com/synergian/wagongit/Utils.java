@@ -63,4 +63,10 @@ public final class Utils {
 			}
 		}
 	}
+
+	public static boolean getBooleanEnvironmentProperty(String key) {
+
+		return Boolean.parseBoolean(System.getProperty(key, "false"));
+
+	}
 }
