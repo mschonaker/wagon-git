@@ -39,23 +39,11 @@ public class GitBackend {
 			remote = url.substring(i + 3, url.length());
 		}
 
-		// Create a directory under given workDir for each URL, using the
-		// URL. Do this in order to support multiple repos corresponding to
-		// different remotes.
-		this.workDir = new File(workDir, encodePath(remote));
+		this.workDir = new File(workDir, Utils.hashPath(remote));
 		this.workDir.mkdir();
 		if (!this.workDir.exists())
 			throw new GitException("Unable to create working directory");
 
-		// TODO validate branch characters and strip remote.
-	}
-
-	private String encodePath(String path) throws GitException {
-		try {
-			return URLEncoder.encode(path, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			throw new GitException("Unable to encode path", e);
-		}
 	}
 
 	private boolean run(String command) throws GitException {

@@ -45,25 +45,18 @@ public class GitWagon extends AbstractWagon {
 		// Ignore.
 	}
 
-	/**
-	 * Directory containing the build files.
-	 * 
-	 * @parameter expression="\${project.build.directory}"
-	 */
-	private File buildDirectory;
-
 	protected void openConnectionInternal() throws ConnectionException, AuthenticationException {
 
 		log.debug("Invoked openConnectionInternal()");
 
 		if (git == null) {
-			File workDir = new File(buildDirectory, "wagon-git");
-			workDir.mkdirs();
-
-			if (!workDir.exists())
-				throw new ConnectionException("Unable to create working directory");
-
 			try {
+
+				File workDir = Utils.createCheckoutDirectory();
+
+				if (!workDir.mkdirs())
+					throw new ConnectionException("Unable to create working directory");
+
 				String remote = getRepository().getUrl();
 
 				if (remote.endsWith("/"))
