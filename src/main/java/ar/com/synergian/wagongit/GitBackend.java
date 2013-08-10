@@ -15,7 +15,7 @@ import org.codehaus.plexus.util.cli.Commandline;
 
 public class GitBackend {
 
-	private final File workDir;
+	final File workDir;
 	private final String remote;
 	private final String branch;
 	private boolean dirty = false;
@@ -171,17 +171,8 @@ public class GitBackend {
 		dirty = false;
 	}
 
-	public void put(File source, String destination) throws IOException {
-		FileUtils.copyFile(source, new File(workDir, destination));
+	public void dirty() throws IOException {
 		dirty = true;
-	}
-
-	public void get(Resource resource, File localFile) throws IOException {
-
-		File remote = new File(workDir, resource.getName());
-
-		if (remote.exists())
-			FileUtils.copyFile(remote, localFile);
 	}
 
 	public void putDirectory(File sourceDirectory, String destinationDirectory) throws IOException {
