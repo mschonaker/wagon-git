@@ -64,21 +64,34 @@ public class GitWagon extends AbstractWagon {
 	protected void openConnectionInternal() throws ConnectionException, AuthenticationException {
 
 		log.debug("Invoked openConnectionInternal()");
-		
+
 		if (git == null) {
 			try {
 
-				String remote = getRepository().getUrl();
+				String url = getRepository().getUrl();
 
-				if (remote.endsWith("/"))
-					remote = remote.substring(0, remote.length() - 1);
+				if (url.endsWith("/"))
+					url = url.substring(0, url.length() - 1);
+
+				String remote;
+				String branch;
+
+				url = url.substring("git:".length());
+				int i = url.indexOf(':');
+				if (i < 0) {
+					remote = url;
+					branch = "master";
+				} else {
+					branch = url.substring(0, i);
+					remote = url.substring(i + 3, url.length());
+				}
 
 				File workDir = Utils.createCheckoutDirectory(remote);
 
 				if (!workDir.exists() || !workDir.isDirectory() || !workDir.canWrite())
 					throw new ConnectionException("Unable to create working directory");
 
-				git = new GitBackend(workDir, remote, log);
+				git = new GitBackend(workDir, remote, branch, log);
 				git.pullAll();
 			} catch (Exception e) {
 				throw new ConnectionException("Unable to pull git repository: " + e.getMessage(), e);

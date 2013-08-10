@@ -41,19 +41,10 @@ public class GitBackend {
 
 	};
 
-	public GitBackend(File workDir, String url, ScmLogger log) throws GitException {
+	public GitBackend(File workDir, String remote, String branch, ScmLogger log) throws GitException {
 		this.log = log;
-
-		url = url.substring("git:".length());
-		int i = url.indexOf(':');
-		if (i < 0) {
-			remote = url;
-			branch = "master";
-		} else {
-			branch = url.substring(0, i);
-			remote = url.substring(i + 3, url.length());
-		}
-
+		this.remote = remote;
+		this.branch = branch;
 		this.workDir = workDir;
 		if (!this.workDir.exists())
 			throw new GitException("Invalid directory");
