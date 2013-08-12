@@ -13,6 +13,8 @@
       <item name="Basic configuration" href="usage.html"/>
       <item name="Github usage" href="github.html"/>
       <item name="Bitbucket usage" href="bitbucket.html"/>
+      <item name="Troubleshooting" href="troubleshooting.html"/>
+      <item name="Development" href="development.html"/>
     </menu>
 
     <menu ref="reports"/>

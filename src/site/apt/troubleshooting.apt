@@ -1,0 +1,19 @@
+Troubleshooting
+
+* Safe checkout mode
+
+
+   <<wagon-git>> attempts to reuse as much as possible the same temp directory as for a given remote git repository. It could be possible that this represents a problem. It could be a good idea to perform a test deploy through the command:
+   
++--  
+mvn clean deploy site-deploy -DperformRelease -Dwagon.git.safe.checkout=true
++--
+
+* Debug mode
+
+
+   It is possible to print some debug messages through the environment property <<<wagon.git.debug>>>. It could be a good idea for error reporting to use:
+   
++--
+mvn clean deploy site-deploy -DperformRelease -Dwagon.git.debug=true
++--

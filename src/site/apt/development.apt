@@ -1,0 +1,5 @@
+Development
+
+* Bootstrapping
+
+   In order to use <<wagon-git>> to deploy <<wagon-git>> itself to a git repository, just add the <<wagon-git>> shaded jar to the maven classpath.
