@@ -17,11 +17,13 @@ import org.apache.maven.wagon.authorization.AuthorizationException;
 import org.apache.maven.wagon.events.TransferEvent;
 import org.apache.maven.wagon.observers.Debug;
 import org.apache.maven.wagon.resource.Resource;
+import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.StringUtils;
 
 public class GitWagon extends AbstractWagon {
 
 	private final boolean debug = Utils.getBooleanEnvironmentProperty("wagon.git.debug");
+	private final boolean safeCheckout = Utils.getBooleanEnvironmentProperty("wagon.git.safe.checkout");
 
 	private final ScmLogger log = new GitWagonLog(debug);
 
@@ -91,6 +93,9 @@ public class GitWagon extends AbstractWagon {
 				if (!workDir.exists() || !workDir.isDirectory() || !workDir.canWrite())
 					throw new ConnectionException("Unable to create working directory");
 
+				if (safeCheckout)
+					FileUtils.cleanDirectory(workDir);
+
 				git = new GitBackend(workDir, remote, branch, log);
 				git.pullAll();
 			} catch (Exception e) {
@@ -107,7 +112,12 @@ public class GitWagon extends AbstractWagon {
 		log.debug("Invoked closeConnection()");
 
 		try {
+
 			git.pushAll();
+
+			if (safeCheckout)
+				FileUtils.cleanDirectory(git.workDir);
+
 		} catch (Exception e) {
 			throw new ConnectionException("Unable to push git repostory: " + e.getMessage(), e);
 		}
@@ -129,7 +139,6 @@ public class GitWagon extends AbstractWagon {
 		try {
 
 			transfer(resource, source, new FileOutputStream(new File(git.workDir, destination)), true);
-			git.dirty();
 
 		} catch (IOException e) {
 			fireTransferError(resource, e, TransferEvent.REQUEST_PUT);
@@ -213,7 +222,9 @@ public class GitWagon extends AbstractWagon {
 		firePutStarted(resource, sourceDirectory);
 
 		try {
+
 			git.putDirectory(sourceDirectory, destinationDirectory);
+
 		} catch (Exception e) {
 			fireTransferError(resource, e, TransferEvent.REQUEST_PUT);
 			throw new TransferFailedException("Unable to put file", e);

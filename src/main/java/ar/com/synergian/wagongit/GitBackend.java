@@ -17,7 +17,6 @@ public class GitBackend {
 	final File workDir;
 	private final String remote;
 	private final String branch;
-	private boolean dirty = false;
 
 	private final ScmLogger log;
 
@@ -142,32 +141,22 @@ public class GitBackend {
 
 	public void pushAll() throws GitException {
 
-		// There are some pull/push that doesn't add anything...
-		if (dirty) {
+		if (!run("add", new String[] { "." }))
+			throw new GitException("Unable to add files");
 
-			if (!run("add", new String[] { "." }))
-				throw new GitException("Unable to add files");
+		String timestamp = new SimpleDateFormat().format(new Date());
 
-			String timestamp = new SimpleDateFormat().format(new Date());
+		if (!run("commit", new String[] { "--allow-empty", "-m", "[wagon-git]" + " commit to branch " + branch + " " + timestamp }))
+			throw new GitException("Unable to commit files");
 
-			if (!run("commit", new String[] { "--allow-empty", "-m", "[wagon-git]" + " commit to branch " + branch + " " + timestamp }))
-				throw new GitException("Unable to commit files");
+		if (!run("push", new String[] { "--progress", "origin", branch }))
+			throw new GitException("Unable to push files");
 
-			if (!run("push", new String[] { "--progress", "origin", branch }))
-				throw new GitException("Unable to push files");
-		}
-
-		dirty = false;
-	}
-
-	public void dirty() throws IOException {
-		dirty = true;
 	}
 
 	public void putDirectory(File sourceDirectory, String destinationDirectory) throws IOException {
 
 		FileUtils.copyDirectoryStructure(sourceDirectory, new File(workDir, destinationDirectory));
 
-		dirty = true;
 	}
 }
