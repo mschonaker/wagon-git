@@ -138,9 +138,11 @@ public class GitWagon extends AbstractWagon {
 
 		try {
 
-			transfer(resource, source, new FileOutputStream(new File(git.workDir, destination)), true);
+			File file = new File(git.workDir, destination);
+			file.getParentFile().mkdirs();
+			transfer(resource, source, new FileOutputStream(file), true);
 
-		} catch (IOException e) {
+		} catch (Exception e) {
 			fireTransferError(resource, e, TransferEvent.REQUEST_PUT);
 			throw new TransferFailedException("Unable to put file", e);
 		}
@@ -163,10 +165,8 @@ public class GitWagon extends AbstractWagon {
 		try {
 
 			File remote = new File(git.workDir, resource.getName());
-			if (!remote.exists())
-				throw new IOException("Remote file doesn't exist: " + resourceName);
-
-			transfer(resource, new FileInputStream(remote), new FileOutputStream(localFile), TransferEvent.REQUEST_GET);
+			if (remote.exists())
+				transfer(resource, new FileInputStream(remote), new FileOutputStream(localFile), TransferEvent.REQUEST_GET);
 
 		} catch (Exception e) {
 			fireTransferError(resource, e, TransferEvent.REQUEST_GET);
@@ -193,9 +193,8 @@ public class GitWagon extends AbstractWagon {
 	public boolean resourceExists(String resourceName) throws TransferFailedException, AuthorizationException {
 
 		log.debug("Invoked resourceExists(" + resourceName + ")");
-		log.warn("resourceExists not supported");
 
-		return false;
+		return new File(git.workDir, resourceName).exists();
 	}
 
 	/**
