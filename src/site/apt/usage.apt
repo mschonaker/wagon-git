@@ -26,7 +26,7 @@ Quickstart
     <extension>
       <groupId>ar.com.synergian</groupId>
 	  <artifactId>wagon-git</artifactId>
-	  <version>${project.version}</version>
+	  <version>0.2.0</version>
     </extension>
   </extensions>
 ...

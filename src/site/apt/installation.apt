@@ -1,0 +1,44 @@
+Permanent Installation
+
+   Permanent installation has a few benefits that we describe in the following sections:
+   
+   * Simpler configuration.
+   
+   * Ability to deploy third-party artifacts in one command.
+   
+   * "Bootstrapping", the ability of <<wagon-git>> to deploy itself in a git repository, only for <<wagon-git>> development.
+   
+   
+   In order to make a "permanent" installation, you have to copy the "shaded" jar artifact of <<wagon-git>> in the Maven classpath ( <<<%M2_HOME%/lib>>> according to the Maven installation manual).
+   
+   As per version <<<0.2.0>>> the correct shaded <<wagon-git>> jar file to copy is {{{https://github.com/synergian/wagon-git/raw/releases/ar/com/synergian/wagon-git/0.2.0/wagon-git-0.2.0-shaded.jar}this}}.
+   
+   Please notice that since <<wagon-git IS NOT AN OFFICIAL PLUGIN/WAGON AND IS NOT AVAILABLE IN MAVEN CENTRAL AND POSSIBLY WILL NEVER BE>>, you're discouraged to make your projects dependent of its permanent installation.
+   
+
+* Simpler configuration
+
+   When <<wagon-git>> is available in the Maven's classpath there no need to include the <<<synergian-repo>>> among the project repositories. Neither there's any need to include the <<<<extensions>>>> sections as described in the {{{./usage.html}Basic Configuration}}.
+   
+
+* Third-party jar files installation
+
+   When <<wagon-git>> is available in the Maven's classpath it is possible to upload any third party artifact to a target git repository, just as described in the {{{http://maven.apache.org/guides/mini/guide-3rd-party-jars-remote.html}Guide to deploying 3rd party JARs to remote repository}}.
+ 
+   For instance, it will be possible to execute a command just like this one:
+   
++--
+mvn deploy:deploy-file \
+	-DgroupId=somegroup \
+	-DartifactId=thirdparty \
+	-Dversion=1.1.1 \
+	-Dfile=a-third-party-jar.jar \
+	-DgeneratePom=true \
+	-DrepositoryId=my-maven-repo-releases \
+	-Durl=git:mybranch://git@github.org:mygithubuser/maven-repo.git
++--
+      
+
+* Bootstrapping
+
+   Quite useful for <<wagon-git>> developers, who use <<wagon-git>> as the wagon to deploy <<wagon-git>> itself in the Github git repository.
