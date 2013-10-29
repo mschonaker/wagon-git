@@ -14,10 +14,29 @@ public final class Utils {
 	public static File createCheckoutDirectory(String path) throws GitException {
 
 		File dir = new File(System.getProperty("java.io.tmpdir"), "wagon-git-" + hashPath(path));
+        if(dir.exists()) {
+            deleteDirectory(dir);
+        }
 		dir.mkdirs();
 
 		return dir;
 	}
+    private static boolean deleteDirectory(File directory) {
+        if(directory.exists()){
+            File[] files = directory.listFiles();
+            if(null!=files){
+                for(int i=0; i<files.length; i++) {
+                    if(files[i].isDirectory()) {
+                        deleteDirectory(files[i]);
+                    }
+                    else {
+                        files[i].delete();
+                    }
+                }
+            }
+        }
+        return(directory.delete());
+    }
 
 	private static String sha1(String input) throws NoSuchAlgorithmException {
 
