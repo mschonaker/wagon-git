@@ -137,6 +137,9 @@ public class GitBackend {
 				throw new GitException("Unable to checkout branch");
 		}
 
+        if (!run("pull", new String[] { branch })) {
+            throw new GitException("Unable to pull latest changes");
+        }
 	}
 
 	public void pushAll() throws GitException {
