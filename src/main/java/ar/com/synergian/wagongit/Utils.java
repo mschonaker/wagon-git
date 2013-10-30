@@ -14,13 +14,14 @@ public final class Utils {
 	public static File createCheckoutDirectory(String path) throws GitException {
 
 		File dir = new File(System.getProperty("java.io.tmpdir"), "wagon-git-" + hashPath(path));
-        if(dir.exists()) {
-            deleteDirectory(dir);
-        }
+        //if(dir.exists()) {
+            //deleteDirectory(dir);
+        //}
 		dir.mkdirs();
 
 		return dir;
 	}
+
     private static boolean deleteDirectory(File directory) {
         if(directory.exists()){
             File[] files = directory.listFiles();
