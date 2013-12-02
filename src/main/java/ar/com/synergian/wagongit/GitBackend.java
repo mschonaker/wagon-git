@@ -97,8 +97,14 @@ public class GitBackend {
 			if (!run("init"))
 				throw new GitException("git init failed");
 
-			if (!run("remote", new String[] { "add", "origin", remote }))
-				throw new GitException("git remote failed");
+			if (!run("remote", new String[] { "add", "origin", remote })) {
+				// Patch contributed by Alex Lin <opoo@users.sf.net>
+				// Somehow git remote add failed on windows. Use set-url.
+				log.warn("git remote add failed, try git remote set-url");
+				if (!run("remote", new String[] { "set-url", "origin", remote })) {
+					throw new GitException("git remote failed");
+				}
+			}
 
 			if (!run("fetch", new String[] { "--progress" }))
 				throw new GitException("git fetch failed");
