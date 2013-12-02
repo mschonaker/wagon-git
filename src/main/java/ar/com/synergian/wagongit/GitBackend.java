@@ -137,6 +137,12 @@ public class GitBackend {
 				throw new GitException("Unable to checkout branch");
 		}
 
+		// Fix contributed by kaleksandrov <kiril.aleksandrov.89@gmail.com>.
+		// Sometimes someone else, using another computer, could be releasing.
+		// In that case, our copy is correct, but the head is outdated: pull.
+		// git pull origin <branch>
+		if (!run("pull", new String[] { "origin", branch }))
+			throw new GitException("Unable to pull latest changes");
 	}
 
 	public void pushAll() throws GitException {
