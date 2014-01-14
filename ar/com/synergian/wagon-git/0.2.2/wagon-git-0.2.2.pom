@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>ar.com.synergian</groupId>
+	<artifactId>wagon-git</artifactId>
+	<version>0.2.2</version>
+	<packaging>jar</packaging>
+
+	<name>wagon-git</name>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<prerequisites>
+		<maven>3.0</maven>
+	</prerequisites>
+
+	<inceptionYear>2011</inceptionYear>
+	<developers>
+		<developer>
+			<name>Martin Schonaker</name>
+			<email>mschonaker@synergian.com.ar</email>
+		</developer>
+		<developer>
+			<name>Vidal Santiago Martinez</name>
+			<email>smartinez@synergian.com.ar</email>
+		</developer>
+		<developer>
+			<name>Emilio Bustos</name>
+			<email>ebustos@synergian.com.ar</email>
+		</developer>
+	</developers>
+	<description>
+    A Maven component (a wagon) that enables deploying artifacts in remote Git SCM repositories.
+  </description>
+	<issueManagement>
+		<system>GitHub Issue Tracker</system>
+		<url>https://github.com/synergian/wagon-git/issues</url>
+	</issueManagement>
+	<url>http://synergian.github.com/wagon-git/</url>
+	<organization>
+		<name>Synergian</name>
+		<url>http://synergian.com.ar</url>
+	</organization>
+	<licenses>
+		<license>
+			<name>Apache License 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.maven.scm</groupId>
+			<artifactId>maven-scm-provider-gitexe</artifactId>
+			<version>1.8.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.maven.wagon</groupId>
+			<artifactId>wagon-provider-api</artifactId>
+			<version>2.4</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.8</version>
+			</plugin>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>1.3</source>
+					<target>1.3</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-site-plugin</artifactId>
+				<version>3.3</version>
+			</plugin>
+			<plugin>
+				<artifactId>maven-project-info-reports-plugin</artifactId>
+				<version>2.6</version>
+			</plugin>
+			<plugin>
+				<artifactId>maven-release-plugin</artifactId>
+				<configuration>
+					<goals>deploy site-deploy</goals>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>2.0</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<configuration>
+							<artifactSet>
+								<includes>
+									<include>org.apache.maven.scm:maven-scm-api</include>
+									<include>org.codehaus.plexus:plexus-utils</include>
+									<include>org.apache.maven.scm:maven-scm-provider-gitexe</include>
+								</includes>
+							</artifactSet>
+							<shadedArtifactAttached>true</shadedArtifactAttached>
+							<shadedClassifierName>shaded</shadedClassifierName>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+	<scm>
+		<url>https://github.com/synergian/wagon-git</url>
+		<connection>scm:git:ssh://git@github.com/synergian/wagon-git.git</connection>
+	</scm>
+
+	<distributionManagement>
+		<repository>
+			<id>synergian-private</id>
+			<name>Synergian Private Releases</name>
+			<url>git:releases://git@github.com:synergian/wagon-git.git</url>
+		</repository>
+		<snapshotRepository>
+			<id>synergian-private</id>
+			<name>Synergian Private Snapshots</name>
+			<url>git:snapshots://git@github.com:synergian/wagon-git.git</url>
+		</snapshotRepository>
+		<site>
+			<id>wagon-git-site</id>
+			<name>wagon-git github homepage</name>
+			<url>git:gh-pages://git@github.com:synergian/wagon-git.git</url>
+		</site>
+	</distributionManagement>
+
+</project>
