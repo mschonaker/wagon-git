@@ -85,11 +85,20 @@ public class GitBackend {
 	private boolean isValidRepo() {
 
 		// Where are assuming that this was checked out by this wagon.
-		return new File(workDir, ".git").exists();
+		try {
+
+			return new File(workDir, ".git").exists() && run("status");
+
+		} catch (GitException e) {
+			return false;
+		}
 
 	}
 
 	public void pullAll() throws GitException {
+
+		if (!workDir.exists())
+			workDir.mkdirs();
 
 		// if there a valid ".git" directory?
 		if (!isValidRepo()) {
@@ -147,8 +156,11 @@ public class GitBackend {
 		// Sometimes someone else, using another computer, could be releasing.
 		// In that case, our copy is correct, but the head is outdated: pull.
 		// git pull origin <branch>
-		if (!run("pull", new String[] { "origin", branch }))
-			throw new GitException("Unable to pull latest changes");
+		// if (!run("pull", new String[] { "origin", branch }))
+		// throw new GitException("Unable to pull latest changes");
+
+		// Just don't fail if the remote branch doesn't exist.
+		run("pull", new String[] { "origin", branch });
 	}
 
 	public void pushAll() throws GitException {
