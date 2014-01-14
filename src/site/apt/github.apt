@@ -9,7 +9,7 @@ Configuring wagon-git for GitHub
   <repository>
     <id>your-repo-id</id>
     <name>Your Repo Name</name>
-	<url>git:releases://git@github.com:yourgithubusername/your-github-repo.git</url>
+    <url>git:releases://git@github.com:yourgithubusername/your-github-repo.git</url>
   </repository>
 </distributionManagement>
 +--
@@ -21,12 +21,12 @@ Configuring wagon-git for GitHub
   <repository>
     <id>your-repo-id</id>
     <name>Your Repo Name</name>
-	<url>git:releases://git@github.com:yourgithubusername/your-github-repo.git</url>
+    <url>git:releases://git@github.com:yourgithubusername/your-github-repo.git</url>
   </repository>
   <snapshotRepository>
     <id>your-snapshot-repo-id</id>
     <name>Your Snapshot Repo Name</name>
-	<url>git:snapshots://git@github.com:yourgithubusername/your-github-repo2.git</url>
+    <url>git:snapshots://git@github.com:yourgithubusername/your-github-repo2.git</url>
   </snapshotRepository>
 </distributionManagement>
 +--
@@ -38,16 +38,16 @@ Configuring wagon-git for GitHub
   <repository>
     <id>your-repo-id</id>
     <name>Your Repo Name</name>
-	<url>git:releases://git@github.com:yourgithubusername/your-github-repo.git</url>
+    <url>git:releases://git@github.com:yourgithubusername/your-github-repo.git</url>
   </repository>
   <snapshotRepository>
     <id>your-snapshot-repo-id</id>
     <name>Your Snapshot Repo Name</name>
-	<url>git:snapshots://git@github.com:yourgithubusername/your-github-repo2.git</url>
+    <url>git:snapshots://git@github.com:yourgithubusername/your-github-repo2.git</url>
   </snapshotRepository>
   <site>
     <id>your-site-repo-id</id>
-	<url>git:site://git@github.com:yourgithubusername/your-github-repo2.git</url>
+    <url>git:site://git@github.com:yourgithubusername/your-github-repo2.git</url>
   </site>
 </distributionManagement>
 +--
@@ -60,7 +60,7 @@ Configuring wagon-git for GitHub
   ...
   <site>
     <id>your-site-repo-id</id>
-	<url>git:gh-pages://git@github.com:yourgithubusername/your-github-repo2.git</url>
+    <url>git:gh-pages://git@github.com:yourgithubusername/your-github-repo2.git</url>
   </site>
   ...
 +--
