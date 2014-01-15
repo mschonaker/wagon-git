@@ -2,7 +2,8 @@ wagon-git
 
     A Maven component (a wagon) that enables deploying artifacts in remote Git SCM repositories.
     
-
+    <<wagon-git>> Requires <<{{{http://git-scm.com/}git}}>> already installed and available in the environment PATH variable.
+    
 Features
 
     * Enables to configure different Git repositories for releases, snapshots and site.
@@ -14,4 +15,8 @@ Features
     * Enables to use regular <<{{{http://bitbucket.org}Bitbucket}}>> Git repositories as Maven repositories (<<public or private>>).
     
     * Can create "orphan" branches, without parent branch (useful for {{{http://pages.github.com/}GitHub Pages}} <<<gh-pages>>> branches).
+    
+Disclaimer
+	
+	<<wagon-git>> is a general purpose git wagon, not only for Bitbucket or Github. Please read {{{https://www.atlassian.com/hosted/terms.jsp}Bitbucket's Hosting Terms of Use}} and {{{https://help.github.com/articles/github-terms-of-service}Github's Terms of Service}} before deploying anything there.       
     
