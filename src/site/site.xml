@@ -1,23 +1,80 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="wagon-git">
-  
-  <body>
-  
-    <links>
-      <item name="GitHub Project Home" href="https://github.com/synergian/wagon-git" />
-      <item name="Synergian" href="http://synergian.com.ar"/>
-    </links>
 
-    <menu name="wagon-git">
-      <item name="Introduction" href="index.html"/>
-      <item name="Basic configuration" href="usage.html"/>
-      <item name="Github usage" href="github.html"/>
-      <item name="Bitbucket usage" href="bitbucket.html"/>
-      <item name="Troubleshooting" href="troubleshooting.html"/>
-      <item name="Permanent Installation" href="installation.html"/>
-    </menu>
+	<skin>
+		<groupId>org.apache.maven.skins</groupId>
+		<artifactId>maven-fluido-skin</artifactId>
+		<version>1.3.1</version>
+	</skin>
 
-    <menu ref="reports"/>
+	<custom>
+		<fluidoSkin>
+			<topBarEnabled>false</topBarEnabled>
+			<sideBarEnabled>true</sideBarEnabled>
+			<copyrightClass>pull-right</copyrightClass>
+			<leftColumnClass>span2 affix affix-top</leftColumnClass>
+			<bodyColumnClass>span10 offset3</bodyColumnClass>
+			<sourceLineNumbersEnabled>true</sourceLineNumbersEnabled>
+		</fluidoSkin>
+	</custom>
 
-  </body>
+	<body>
+
+		<links>
+			<item
+				name="GitHub Project Home"
+				href="https://github.com/synergian/wagon-git" />
+			<item
+				name="Synergian"
+				href="http://synergian.com.ar" />
+		</links>
+
+		<menu name="wagon-git">
+			<item
+				name="Introduction"
+				href="index.html"
+				collapse="true">
+				<item
+					name="Features"
+					href="index.html#Features">
+				</item>
+				<item
+					name="Disclaimer"
+					href="index.html#Disclaimer">
+				</item>
+			</item>
+			<item
+				name="Basic configuration"
+				href="usage.html"
+				collapse="true">
+				<item
+					name="Configure repository"
+					href="usage.html#Configure_repository" />
+				<item
+					name="Extensions section"
+					href="usage.html#Extensions_section" />
+				<item
+					name="URL parts"
+					href="usage.html#URL_parts" />
+				<item
+					name="Next steps"
+					href="usage.html#Next_steps" />
+			</item>
+			<item
+				name="Github usage"
+				href="github.html" />
+			<item
+				name="Bitbucket usage"
+				href="bitbucket.html" />
+			<item
+				name="Troubleshooting"
+				href="troubleshooting.html" />
+			<item
+				name="Permanent Installation"
+				href="installation.html" />
+		</menu>
+
+		<menu ref="reports" />
+
+	</body>
 </project>

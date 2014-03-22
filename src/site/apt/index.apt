@@ -16,6 +16,9 @@ Features
     
     * Can create "orphan" branches, without parent branch (useful for {{{http://pages.github.com/}GitHub Pages}} <<<gh-pages>>> branches).
     
+
+=====================
+    
 Disclaimer
 	
 	<<wagon-git>> is a general purpose git wagon, not only for Bitbucket or Github. Please read {{{https://www.atlassian.com/hosted/terms.jsp}Bitbucket's Hosting Terms of Use}} and {{{https://help.github.com/articles/github-terms-of-service}Github's Terms of Service}} before deploying anything there.       

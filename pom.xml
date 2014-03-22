@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>ar.com.synergian</groupId>
@@ -32,9 +35,7 @@
 			<email>ebustos@synergian.com.ar</email>
 		</developer>
 	</developers>
-	<description>
-    A Maven component (a wagon) that enables deploying artifacts in remote Git SCM repositories.
-  </description>
+	<description>A Maven component (a wagon provider) that enables deploying artifacts in remote Git SCM repositories.</description>
 	<issueManagement>
 		<system>GitHub Issue Tracker</system>
 		<url>https://github.com/synergian/wagon-git/issues</url>
@@ -51,6 +52,10 @@
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
+	<ciManagement>
+		<system>drone.io</system>
+		<url>https://drone.io/github.com/synergian/wagon-git/latest</url>
+	</ciManagement>
 
 	<dependencies>
 		<dependency>
@@ -126,18 +131,18 @@
 
 	<distributionManagement>
 		<repository>
-			<id>synergian-private</id>
-			<name>Synergian Private Releases</name>
+			<id>wagon-git-releases</id>
+			<name>Synergian Releases</name>
 			<url>git:releases://git@github.com:synergian/wagon-git.git</url>
 		</repository>
 		<snapshotRepository>
-			<id>synergian-private</id>
-			<name>Synergian Private Snapshots</name>
+			<id>wagon-git-snapshots</id>
+			<name>Synergian Snapshots</name>
 			<url>git:snapshots://git@github.com:synergian/wagon-git.git</url>
 		</snapshotRepository>
 		<site>
 			<id>wagon-git-site</id>
-			<name>wagon-git github homepage</name>
+			<name>wagon-git Github Homepage</name>
 			<url>git:gh-pages://git@github.com:synergian/wagon-git.git</url>
 		</site>
 	</distributionManagement>

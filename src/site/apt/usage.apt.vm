@@ -1,6 +1,8 @@
-Quickstart
+Basic Configuration
 
-* Add Synergian repos to your <<<pom.xml>>> where <<<wagon-git>>> is usually released. 
+* Configure repository
+
+    Add Synergian repos to your <<<pom.xml>>> where <<<wagon-git>>> is usually released. 
 
 +--
 ...
@@ -33,7 +35,7 @@ Quickstart
 </build>
 +--
 
-* NOTE: Parts in the Repositories URLs
+* URL parts
 
     In the following configuration you'll URLs as the one in this example:
 
