@@ -1,1 +1,6 @@
-/* You can override this file with your own styles */
+/* Custom Asante Styles */
+.container-fluid {
+	margin-right: auto;
+	margin-left: auto;
+	max-width: 1200px;
+}
