@@ -11,7 +11,7 @@ Permanent Installation
    
    In order to make a "permanent" installation, you have to copy the "shaded" jar artifact of <<wagon-git>> in the Maven classpath ( <<<%M2_HOME%/lib>>> according to the Maven installation manual).
    
-   As per version <<<0.2.0>>> the correct shaded <<wagon-git>> jar file to copy is {{{https://github.com/synergian/wagon-git/raw/releases/ar/com/synergian/wagon-git/0.2.0/wagon-git-0.2.0-shaded.jar}this}}.
+   As per version <<<${project.version}>>> the correct shaded <<wagon-git>> jar file to copy is {{{https://github.com/synergian/wagon-git/raw/releases/ar/com/synergian/wagon-git/${project.version}/wagon-git-${project.version}-shaded.jar}this}}.
    
    Please notice that since <<wagon-git IS NOT AN OFFICIAL PLUGIN/WAGON AND IS NOT AVAILABLE IN MAVEN CENTRAL AND POSSIBLY WILL NEVER BE>>, you're discouraged to make your projects dependent of its permanent installation.
    
