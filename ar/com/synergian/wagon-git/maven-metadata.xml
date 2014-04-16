@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>ar.com.synergian</groupId>
+  <artifactId>wagon-git</artifactId>
+  <versioning>
+    <versions>
+      <version>0.2.5-SNAPSHOT</version>
+    </versions>
+    <lastUpdated>20140416234336</lastUpdated>
+  </versioning>
+</metadata>
