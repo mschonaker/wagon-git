@@ -158,19 +158,17 @@ public class GitWagon extends AbstractWagon {
 
 		Resource resource = new Resource(resourceName);
 
+		File remote = new File(git.workDir, resource.getName());
+		if (!remote.exists())
+			return;
+
 		fireGetInitiated(resource, localFile);
-		fireGetStarted(resource, localFile);
-
 		try {
-
-			File remote = new File(git.workDir, resource.getName());
-
-			// This line created empty files as reported by Riccardo Cossu.
-			// if (remote.exists())
+			fireGetStarted(resource, localFile);
 
 			transfer(resource, new FileInputStream(remote), new FileOutputStream(localFile), TransferEvent.REQUEST_GET);
-			fireGetCompleted(resource, localFile);
 
+			fireGetCompleted(resource, localFile);
 		} catch (Exception e) {
 			fireTransferError(resource, e, TransferEvent.REQUEST_GET);
 			throw new TransferFailedException("Unable to get file", e);

@@ -136,6 +136,6 @@ public class GitWagonLog implements ScmLogger {
 	 * {@inheritDoc}
 	 */
 	public void error(Throwable error) {
-		error("", null);
+		error("", error);
 	}
 }
