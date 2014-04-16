@@ -20,6 +20,12 @@
         <value>0.2.5-20140416.234336-1</value>
         <updated>20140416234336</updated>
       </snapshotVersion>
+      <snapshotVersion>
+        <classifier>shaded</classifier>
+        <extension>jar</extension>
+        <value>0.2.5-20140416.234336-1</value>
+        <updated>20140416234336</updated>
+      </snapshotVersion>
     </snapshotVersions>
   </versioning>
 </metadata>
