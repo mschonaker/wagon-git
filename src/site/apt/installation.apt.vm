@@ -38,6 +38,8 @@ mvn deploy:deploy-file \
 	-Durl=git:mybranch://git@github.org:mygithubuser/maven-repo.git
 +--
       
+   See the goal {{{http://maven.apache.org/plugins/maven-deploy-plugin/deploy-file-mojo.html}<<<deploy:deploy-file>>>}} for further configuration details.
+
 
 * Bootstrapping
 
