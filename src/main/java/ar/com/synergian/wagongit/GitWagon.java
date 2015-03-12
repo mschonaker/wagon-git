@@ -158,11 +158,12 @@ public class GitWagon extends AbstractWagon {
 
 		Resource resource = new Resource(resourceName);
 
-		File remote = new File(git.workDir, resource.getName());
-		if (!remote.exists())
-			return;
-
 		fireGetInitiated(resource, localFile);
+
+		File remote = new File(git.workDir, resource.getName());
+
+        checkFileExists(remote, resource);
+
 		try {
 			fireGetStarted(resource, localFile);
 
@@ -242,4 +243,13 @@ public class GitWagon extends AbstractWagon {
 		return true;
 	}
 
+    protected void checkFileExists(File remote, Resource resource) throws TransferFailedException {
+        if (!remote.exists()) {
+            TransferFailedException e =
+                    new TransferFailedException( getRepository().getUrl()
+                            + " - File does not exist for resource: '" + resource + "'" );
+            fireTransferError( resource, e, TransferEvent.REQUEST_GET );
+            throw e;
+        }
+    }
 }
