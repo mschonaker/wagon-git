@@ -1,25 +1,28 @@
 package ar.com.synergian.wagongit;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.util.List;
-import java.util.Properties;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 import org.apache.maven.scm.log.ScmLogger;
-import org.apache.maven.wagon.AbstractWagon;
 import org.apache.maven.wagon.ConnectionException;
+import org.apache.maven.wagon.InputData;
+import org.apache.maven.wagon.LazyFileOutputStream;
+import org.apache.maven.wagon.OutputData;
 import org.apache.maven.wagon.ResourceDoesNotExistException;
+import org.apache.maven.wagon.StreamWagon;
 import org.apache.maven.wagon.TransferFailedException;
 import org.apache.maven.wagon.authentication.AuthenticationException;
 import org.apache.maven.wagon.authorization.AuthorizationException;
-import org.apache.maven.wagon.events.TransferEvent;
 import org.apache.maven.wagon.observers.Debug;
 import org.apache.maven.wagon.resource.Resource;
 import org.codehaus.plexus.util.FileUtils;
-import org.codehaus.plexus.util.StringUtils;
 
-public class GitWagon extends AbstractWagon {
+public class GitWagon extends StreamWagon {
 
 	private final boolean debug = Utils.getBooleanEnvironmentProperty("wagon.git.debug");
 	private final boolean safeCheckout = Utils.getBooleanEnvironmentProperty("wagon.git.safe.checkout");
@@ -38,25 +41,40 @@ public class GitWagon extends AbstractWagon {
 
 	}
 
-	/**
-	 * Required by plexus. But ignored.
-	 */
-	public void setSshExecutable(String sshExecutable) {
-		// Ignore.
+	public void fillInputData(InputData inputData) throws TransferFailedException, ResourceDoesNotExistException, AuthorizationException {
+
+		Resource resource = inputData.getResource();
+
+		File file = new File(git.workDir, resource.getName());
+
+		if (!file.exists()) {
+			throw new ResourceDoesNotExistException("File: " + file + " does not exist");
+		}
+
+		try {
+			InputStream in = new BufferedInputStream(new FileInputStream(file));
+
+			inputData.setInputStream(in);
+
+			resource.setContentLength(file.length());
+
+			resource.setLastModified(file.lastModified());
+		} catch (FileNotFoundException e) {
+			throw new TransferFailedException("Could not read from file: " + file.getAbsolutePath(), e);
+		}
 	}
 
-	/**
-	 * Required by plexus. But ignored.
-	 */
-	public void setScpExecutable(String scpExecutable) {
-		// Ignore.
-	}
+	public void fillOutputData(OutputData outputData) throws TransferFailedException {
 
-	/**
-	 * Required by plexus. But ignored.
-	 */
-	public void setHttpHeaders(Properties httpHeaders) {
-		// Ignore.
+		Resource resource = outputData.getResource();
+
+		File file = new File(git.workDir, resource.getName());
+
+		createParentDirectories(file);
+
+		OutputStream outputStream = new BufferedOutputStream(new LazyFileOutputStream(file));
+
+		outputData.setOutputStream(outputStream);
 	}
 
 	/**
@@ -106,7 +124,7 @@ public class GitWagon extends AbstractWagon {
 	/**
 	 * {@inheritDoc}
 	 */
-	protected void closeConnection() throws ConnectionException {
+	public void closeConnection() throws ConnectionException {
 
 		log.debug("Invoked closeConnection()");
 
@@ -121,125 +139,4 @@ public class GitWagon extends AbstractWagon {
 			throw new ConnectionException("Unable to push git repostory: " + e.getMessage(), e);
 		}
 	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public void put(File source, String destination) throws TransferFailedException, ResourceDoesNotExistException, AuthorizationException {
-
-		log.debug("Invoked put(" + source.getAbsolutePath() + ", " + destination + ")");
-
-		String resourceName = StringUtils.replace(destination, "\\", "/");
-		Resource resource = new Resource(resourceName);
-
-		firePutInitiated(resource, source);
-		firePutStarted(resource, source);
-
-		try {
-
-			File file = new File(git.workDir, destination);
-			file.getParentFile().mkdirs();
-			transfer(resource, source, new FileOutputStream(file), true);
-
-		} catch (Exception e) {
-			fireTransferError(resource, e, TransferEvent.REQUEST_PUT);
-			throw new TransferFailedException("Unable to put file", e);
-		}
-
-		firePutCompleted(resource, source);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public void get(String resourceName, File localFile) throws TransferFailedException, ResourceDoesNotExistException, AuthorizationException {
-
-		log.debug("Invoked get(" + resourceName + ", " + localFile.getAbsolutePath() + ")");
-
-		Resource resource = new Resource(resourceName);
-
-		File remote = new File(git.workDir, resource.getName());
-		if (!remote.exists())
-			return;
-
-		fireGetInitiated(resource, localFile);
-		try {
-			fireGetStarted(resource, localFile);
-
-			transfer(resource, new FileInputStream(remote), new FileOutputStream(localFile), TransferEvent.REQUEST_GET);
-
-			fireGetCompleted(resource, localFile);
-		} catch (Exception e) {
-			fireTransferError(resource, e, TransferEvent.REQUEST_GET);
-			throw new TransferFailedException("Unable to get file", e);
-		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public List getFileList(String destinationDirectory) throws TransferFailedException, ResourceDoesNotExistException, AuthorizationException {
-
-		log.debug("Invoked getFileList(" + destinationDirectory + ")");
-		log.warn("getFileList not supported");
-
-		return null;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public boolean resourceExists(String resourceName) throws TransferFailedException, AuthorizationException {
-
-		log.debug("Invoked resourceExists(" + resourceName + ")");
-
-		return new File(git.workDir, resourceName).exists();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public boolean supportsDirectoryCopy() {
-
-		log.debug("Invoked supportsDirectoryCopy()");
-
-		return true;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public void putDirectory(File sourceDirectory, String destinationDirectory) throws TransferFailedException, ResourceDoesNotExistException, AuthorizationException {
-
-		log.debug("Invoked putDirectory(" + sourceDirectory.getAbsolutePath() + ", " + destinationDirectory + ")");
-
-		String resourceName = StringUtils.replace(destinationDirectory, "\\", "/");
-		Resource resource = new Resource(resourceName);
-
-		firePutInitiated(resource, sourceDirectory);
-		firePutStarted(resource, sourceDirectory);
-
-		try {
-
-			git.putDirectory(sourceDirectory, destinationDirectory);
-
-		} catch (Exception e) {
-			fireTransferError(resource, e, TransferEvent.REQUEST_PUT);
-			throw new TransferFailedException("Unable to put file", e);
-		}
-
-		firePutCompleted(resource, sourceDirectory);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public boolean getIfNewer(String resourceName, File destination, long timestamp) throws TransferFailedException, ResourceDoesNotExistException, AuthorizationException {
-
-		log.debug("Invoked getIfNewer(" + resourceName + ", " + destination.getAbsolutePath() + ", " + timestamp + ")");
-		log.warn("getIfNewer not supported");
-
-		return true;
-	}
-
 }

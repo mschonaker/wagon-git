@@ -54,7 +54,7 @@ public class GitBackend {
 		return run(command, null);
 	}
 
-	private boolean run(String command, String[] args) throws GitException {
+	private synchronized boolean run(String command, String[] args) throws GitException {
 
 		try {
 
