@@ -41,7 +41,12 @@ public class GitWagon extends StreamWagon {
 
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void fillInputData(InputData inputData) throws TransferFailedException, ResourceDoesNotExistException, AuthorizationException {
+
+		log.debug("Invoked fillInputData()");
 
 		Resource resource = inputData.getResource();
 
@@ -64,7 +69,12 @@ public class GitWagon extends StreamWagon {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void fillOutputData(OutputData outputData) throws TransferFailedException {
+
+		log.debug("Invoked fillOutputData()");
 
 		Resource resource = outputData.getResource();
 
