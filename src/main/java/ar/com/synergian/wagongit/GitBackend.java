@@ -163,15 +163,21 @@ public class GitBackend {
 		run("pull", new String[] { "origin", branch });
 	}
 
-	public void pushAll() throws GitException {
+	public void pushAll(boolean skipEmptyCommit) throws GitException {
 
 		if (!run("add", new String[] { "." }))
 			throw new GitException("Unable to add files");
 
 		String timestamp = new SimpleDateFormat().format(new Date());
 
-		if (!run("commit", new String[] { "--allow-empty", "-m", "[wagon-git]" + " commit to branch " + branch + " " + timestamp }))
-			throw new GitException("Unable to commit files");
+		if(skipEmptyCommit) {
+			if (!run("commit", new String[] {"-m", "[wagon-git]" + " commit to branch " + branch + " " + timestamp }))
+				throw new GitException("Unable to commit files");
+		}
+		else {
+			if (!run("commit", new String[] { "--allow-empty", "-m", "[wagon-git]" + " commit to branch " + branch + " " + timestamp }))
+				throw new GitException("Unable to commit files");
+		}
 
 		if (!run("push", new String[] { "--progress", "origin", branch }))
 			throw new GitException("Unable to push files");

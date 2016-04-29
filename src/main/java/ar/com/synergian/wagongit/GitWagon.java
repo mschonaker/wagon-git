@@ -20,12 +20,13 @@ import org.apache.maven.wagon.authentication.AuthenticationException;
 import org.apache.maven.wagon.authorization.AuthorizationException;
 import org.apache.maven.wagon.observers.Debug;
 import org.apache.maven.wagon.resource.Resource;
-import org.codehaus.plexus.util.FileUtils;
+import org.apache.commons.io.FileUtils;
 
 public class GitWagon extends StreamWagon {
 
 	private final boolean debug = Utils.getBooleanEnvironmentProperty("wagon.git.debug");
 	private final boolean safeCheckout = Utils.getBooleanEnvironmentProperty("wagon.git.safe.checkout");
+	private final boolean skipEmptyCommit = Utils.getBooleanEnvironmentProperty("wagon.git.skip.empty.commit");
 
 	private final ScmLogger log = new GitWagonLog(debug);
 
@@ -140,7 +141,7 @@ public class GitWagon extends StreamWagon {
 
 		try {
 
-			git.pushAll();
+			git.pushAll(skipEmptyCommit);
 
 			if (safeCheckout)
 				FileUtils.cleanDirectory(git.workDir);
