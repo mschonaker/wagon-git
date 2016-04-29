@@ -20,7 +20,7 @@ import org.apache.maven.wagon.authentication.AuthenticationException;
 import org.apache.maven.wagon.authorization.AuthorizationException;
 import org.apache.maven.wagon.observers.Debug;
 import org.apache.maven.wagon.resource.Resource;
-import org.apache.commons.io.FileUtils;
+import org.codehaus.plexus.util.FileUtils;
 
 public class GitWagon extends StreamWagon {
 
