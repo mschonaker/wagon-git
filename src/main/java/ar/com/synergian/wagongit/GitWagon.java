@@ -26,6 +26,7 @@ public class GitWagon extends StreamWagon {
 
 	private final boolean debug = Utils.getBooleanEnvironmentProperty("wagon.git.debug");
 	private final boolean safeCheckout = Utils.getBooleanEnvironmentProperty("wagon.git.safe.checkout");
+	private final boolean skipEmptyCommit = Utils.getBooleanEnvironmentProperty("wagon.git.skip.empty.commit");
 
 	private final ScmLogger log = new GitWagonLog(debug);
 
@@ -140,7 +141,7 @@ public class GitWagon extends StreamWagon {
 
 		try {
 
-			git.pushAll();
+			git.pushAll(skipEmptyCommit);
 
 			if (safeCheckout)
 				FileUtils.cleanDirectory(git.workDir);
