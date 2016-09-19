@@ -12,4 +12,4 @@ http://synergian.github.io/wagon-git/
 - [mvn release:prepare and release:perform with BitBucket](https://dwuysan.wordpress.com/2015/10/29/mvn-releaseprepare-and-releaseperform-with-bitbucket/) by dwuysan.
 - [Bitbucket como repositorio remoto de artifacts con Maven (y wagon-git)](https://hectordeveloper.wordpress.com/2014/12/18/bitbucket-como-repositorio-remoto-de-artifacts-con-maven-y-wagon-git/) by Héctor.
 - [Setting up a Maven repository on Bitbucket](https://plebcode.wordpress.com/2015/08/04/setting-up-a-maven-repository-on-bitbucket/) (and Windows) by grafblutwurst.
-
+- [Git as a secure private Maven repository](http://jeroenmols.com/blog/2016/02/05/wagongit/) by Jeroen Mols. 
