@@ -27,6 +27,7 @@ public class GitWagon extends StreamWagon {
 	private final boolean debug = Utils.getBooleanEnvironmentProperty("wagon.git.debug");
 	private final boolean safeCheckout = Utils.getBooleanEnvironmentProperty("wagon.git.safe.checkout");
 	private final boolean skipEmptyCommit = Utils.getBooleanEnvironmentProperty("wagon.git.skip.empty.commit");
+	private final boolean enableShallowFetch = Utils.getBooleanEnvironmentProperty("wagon.git.enable.shallow.fetch");
 
 	private final ScmLogger log = new GitWagonLog(debug);
 
@@ -124,7 +125,7 @@ public class GitWagon extends StreamWagon {
 				if (safeCheckout)
 					FileUtils.cleanDirectory(workDir);
 
-				git = new GitBackend(workDir, remote, branch, log);
+				git = new GitBackend(workDir, remote, branch, log, enableShallowFetch);
 				git.pullAll();
 			} catch (Exception e) {
 				throw new ConnectionException("Unable to pull git repository: " + e.getMessage(), e);

@@ -12,7 +12,7 @@ public final class Utils {
 	}
 
 	public static File createCheckoutDirectory(String path) throws GitException {
-
+		// FIXME use predefined folder
 		File dir = new File(System.getProperty("java.io.tmpdir"), "wagon-git-" + hashPath(path));
 		dir.mkdirs();
 
