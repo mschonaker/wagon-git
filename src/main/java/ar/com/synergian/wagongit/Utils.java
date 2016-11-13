@@ -11,9 +11,13 @@ public final class Utils {
 	private Utils() {
 	}
 
-	public static File createCheckoutDirectory(String path) throws GitException {
-		// FIXME use predefined folder
-		File dir = new File(System.getProperty("java.io.tmpdir"), "wagon-git-" + hashPath(path));
+	public static File createCheckoutDirectory(String path, boolean isPermanent) throws GitException {
+		File dir;
+		if (isPermanent) {
+			dir = new File(path);
+		} else {
+			dir = new File(System.getProperty("java.io.tmpdir"), "wagon-git-" + hashPath(path));
+		}
 		dir.mkdirs();
 
 		return dir;
@@ -55,8 +59,10 @@ public final class Utils {
 	}
 
 	public static boolean getBooleanEnvironmentProperty(String key) {
-
 		return Boolean.parseBoolean(System.getProperty(key, "false"));
+	}
 
+	public static String getStringEnvironmentProperty(String key) {
+		return System.getProperty(key, null);
 	}
 }

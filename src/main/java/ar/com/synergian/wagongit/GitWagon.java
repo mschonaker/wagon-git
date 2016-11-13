@@ -28,6 +28,7 @@ public class GitWagon extends StreamWagon {
 	private final boolean safeCheckout = Utils.getBooleanEnvironmentProperty("wagon.git.safe.checkout");
 	private final boolean skipEmptyCommit = Utils.getBooleanEnvironmentProperty("wagon.git.skip.empty.commit");
 	private final boolean enableShallowFetch = Utils.getBooleanEnvironmentProperty("wagon.git.enable.shallow.fetch");
+	private final String permanentRoot = Utils.getStringEnvironmentProperty("wagon.git.permanent.root");
 
 	private final ScmLogger log = new GitWagonLog(debug);
 
@@ -117,7 +118,12 @@ public class GitWagon extends StreamWagon {
 					remote = url.substring(i + 3, url.length());
 				}
 
-				File workDir = Utils.createCheckoutDirectory(remote);
+				File workDir;
+				if (permanentRoot != null && !"".equals(permanentRoot)) {
+					workDir = Utils.createCheckoutDirectory(permanentRoot, true);
+				} else {
+					workDir = Utils.createCheckoutDirectory(remote, false);
+				}
 
 				if (!workDir.exists() || !workDir.isDirectory() || !workDir.canWrite())
 					throw new ConnectionException("Unable to create working directory");
