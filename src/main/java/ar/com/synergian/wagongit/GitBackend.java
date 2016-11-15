@@ -3,10 +3,7 @@ package ar.com.synergian.wagongit;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 
 import org.apache.maven.scm.ScmException;
 import org.apache.maven.scm.log.ScmLogger;
@@ -20,7 +17,7 @@ public class GitBackend {
 	final File workDir;
 	private final String remote;
 	private final String branch;
-	private final boolean enableShallowFetch;
+	private final boolean disableShallowFetch;
 
 	private final ScmLogger log;
 
@@ -44,14 +41,14 @@ public class GitBackend {
 
 	};
 
-	public GitBackend(File workDir, String remote, String branch, ScmLogger log, boolean enableShallowFetch) throws GitException {
+	public GitBackend(File workDir, String remote, String branch, ScmLogger log, boolean disableShallowFetch) throws GitException {
 		this.log = log;
 		this.remote = remote;
 		this.branch = branch;
 		this.workDir = workDir;
 		if (!this.workDir.exists())
 			throw new GitException("Invalid directory");
-		this.enableShallowFetch = enableShallowFetch;
+		this.disableShallowFetch = disableShallowFetch;
 
 	}
 
@@ -120,9 +117,9 @@ public class GitBackend {
 				}
 			}
 
-			String[] fetchArgs = new String[] { "--progress" };
-			if (enableShallowFetch) {
-				fetchArgs = new String[] { "--progress", "--depth=1" };
+			String[] fetchArgs = new String[] { "--progress", "--depth=1" };
+			if (disableShallowFetch) {
+				fetchArgs = new String[] { "--progress" };
 			}
 			if (!run("fetch", fetchArgs)) {
 				throw new GitException("git fetch failed");

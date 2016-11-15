@@ -11,15 +11,14 @@ public final class Utils {
 	private Utils() {
 	}
 
-	public static File createCheckoutDirectory(String path, boolean isPermanent) throws GitException {
+	public static File createCheckoutDirectory(String path) throws GitException {
 		File dir;
-		if (isPermanent) {
-			dir = new File(path);
-		} else {
+		if (path.endsWith(".git")) {
 			dir = new File(System.getProperty("java.io.tmpdir"), "wagon-git-" + hashPath(path));
+		} else {
+			dir = new File(path);
 		}
 		dir.mkdirs();
-
 		return dir;
 	}
 
