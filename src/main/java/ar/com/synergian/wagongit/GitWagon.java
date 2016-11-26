@@ -119,7 +119,8 @@ public class GitWagon extends StreamWagon {
 				}
 
 				String path = remote;
-				if (permanentRoot != null && !"".equals(permanentRoot)) {
+				boolean permanentRootIsDefined = (permanentRoot != null && !"".equals(permanentRoot));
+				if (permanentRootIsDefined) {
 					path = permanentRoot;
 				}
 				File workDir = Utils.createCheckoutDirectory(path);
@@ -127,7 +128,7 @@ public class GitWagon extends StreamWagon {
 				if (!workDir.exists() || !workDir.isDirectory() || !workDir.canWrite())
 					throw new ConnectionException("Unable to create working directory");
 
-				if (safeCheckout)
+				if (safeCheckout && !permanentRootIsDefined)
 					FileUtils.cleanDirectory(workDir);
 
 				git = new GitBackend(workDir, remote, branch, log, disableShallowFetch);
