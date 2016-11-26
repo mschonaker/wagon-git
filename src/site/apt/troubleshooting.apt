@@ -9,6 +9,8 @@ Troubleshooting
 mvn clean deploy site-deploy -DperformRelease -Dwagon.git.safe.checkout=true
 +--
 
+   Notice : this parameter is override to false when <<<wagon.git.permanent.root>>> is set.
+
 * Debug mode
 
 

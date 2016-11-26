@@ -1,0 +1,25 @@
+Advanced usage
+
+
+
+* Permanent maven repository
+
+    By default, wagon-git will store the maven repository's remote clone inside temporary files.
+    If you want to change the repository to a permanent location, you can define the path: 
+
++--
+mvn deploy -Dwagon.git.permanent.root="/path/to/a/folder/where/to/store/maven/repo"
++--
+
+
+
+* Lighter initialization
+
+    After a while, the remote maven repository can become quite heavy, especially with all snapshots stored in Git history.
+    We don't usually need all Git history, we only need the latest HEAD.
+    By default, wagont-git will only retrieve the latest HEAD of a branch.
+    If you're using an old version of Git (which doesn't support shallow clone) or if you want to retrieve all the Git history, you can disable the lighter initialization:
+
++--
+mvn deploy -Dwagon.git.disable.shallow.fetch=true
++--
