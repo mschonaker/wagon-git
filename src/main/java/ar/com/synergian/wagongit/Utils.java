@@ -12,10 +12,13 @@ public final class Utils {
 	}
 
 	public static File createCheckoutDirectory(String path) throws GitException {
-
-		File dir = new File(System.getProperty("java.io.tmpdir"), "wagon-git-" + hashPath(path));
+		File dir;
+		if (path.endsWith(".git")) {
+			dir = new File(System.getProperty("java.io.tmpdir"), "wagon-git-" + hashPath(path));
+		} else {
+			dir = new File(path);
+		}
 		dir.mkdirs();
-
 		return dir;
 	}
 
@@ -55,8 +58,10 @@ public final class Utils {
 	}
 
 	public static boolean getBooleanEnvironmentProperty(String key) {
-
 		return Boolean.parseBoolean(System.getProperty(key, "false"));
+	}
 
+	public static String getStringEnvironmentProperty(String key) {
+		return System.getProperty(key, null);
 	}
 }

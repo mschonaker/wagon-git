@@ -17,6 +17,7 @@ public class GitBackend {
 	final File workDir;
 	private final String remote;
 	private final String branch;
+	private final boolean disableShallowFetch;
 
 	private final ScmLogger log;
 
@@ -40,13 +41,14 @@ public class GitBackend {
 
 	};
 
-	public GitBackend(File workDir, String remote, String branch, ScmLogger log) throws GitException {
+	public GitBackend(File workDir, String remote, String branch, ScmLogger log, boolean disableShallowFetch) throws GitException {
 		this.log = log;
 		this.remote = remote;
 		this.branch = branch;
 		this.workDir = workDir;
 		if (!this.workDir.exists())
 			throw new GitException("Invalid directory");
+		this.disableShallowFetch = disableShallowFetch;
 
 	}
 
@@ -115,8 +117,13 @@ public class GitBackend {
 				}
 			}
 
-			if (!run("fetch", new String[] { "--progress" }))
+			String[] fetchArgs = new String[] { "--progress", "--depth=1" };
+			if (disableShallowFetch) {
+				fetchArgs = new String[] { "--progress" };
+			}
+			if (!run("fetch", fetchArgs)) {
 				throw new GitException("git fetch failed");
+			}
 		}
 
 		// if remote branch doesn't exist, create new "headless".

@@ -27,6 +27,8 @@ public class GitWagon extends StreamWagon {
 	private final boolean debug = Utils.getBooleanEnvironmentProperty("wagon.git.debug");
 	private final boolean safeCheckout = Utils.getBooleanEnvironmentProperty("wagon.git.safe.checkout");
 	private final boolean skipEmptyCommit = Utils.getBooleanEnvironmentProperty("wagon.git.skip.empty.commit");
+	private final boolean disableShallowFetch = Utils.getBooleanEnvironmentProperty("wagon.git.disable.shallow.fetch");
+	private final String permanentRoot = Utils.getStringEnvironmentProperty("wagon.git.permanent.root");
 
 	private final ScmLogger log = new GitWagonLog(debug);
 
@@ -116,15 +118,20 @@ public class GitWagon extends StreamWagon {
 					remote = url.substring(i + 3, url.length());
 				}
 
-				File workDir = Utils.createCheckoutDirectory(remote);
+				String path = remote;
+				boolean permanentRootIsDefined = (permanentRoot != null && !"".equals(permanentRoot));
+				if (permanentRootIsDefined) {
+					path = permanentRoot;
+				}
+				File workDir = Utils.createCheckoutDirectory(path);
 
 				if (!workDir.exists() || !workDir.isDirectory() || !workDir.canWrite())
 					throw new ConnectionException("Unable to create working directory");
 
-				if (safeCheckout)
+				if (safeCheckout && !permanentRootIsDefined)
 					FileUtils.cleanDirectory(workDir);
 
-				git = new GitBackend(workDir, remote, branch, log);
+				git = new GitBackend(workDir, remote, branch, log, disableShallowFetch);
 				git.pullAll();
 			} catch (Exception e) {
 				throw new ConnectionException("Unable to pull git repository: " + e.getMessage(), e);

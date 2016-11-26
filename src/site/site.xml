@@ -67,6 +67,9 @@
 				name="Bitbucket usage"
 				href="bitbucket.html" />
 			<item
+				name="Advanced configuration"
+				href="usage-advanced.html" />
+			<item
 				name="Troubleshooting"
 				href="troubleshooting.html" />
 			<item
