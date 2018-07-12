@@ -51,7 +51,7 @@ public class GitWagon extends StreamWagon {
 
 		Resource resource = inputData.getResource();
 
-		File file = new File(git.workDir, resource.getName());
+		File file = new File(git.copyDirectory, resource.getName());
 
 		if (!file.exists()) {
 			throw new ResourceDoesNotExistException("File: " + file + " does not exist");
@@ -79,7 +79,7 @@ public class GitWagon extends StreamWagon {
 
 		Resource resource = outputData.getResource();
 
-		File file = new File(git.workDir, resource.getName());
+		File file = new File(git.copyDirectory, resource.getName());
 
 		createParentDirectories(file);
 
@@ -105,14 +105,16 @@ public class GitWagon extends StreamWagon {
 
 				String remote;
 				String branch;
+				String subPath;
 
 				url = url.substring("git:".length());
 				int i = url.indexOf(':');
+				branch = "master";
 				if (i < 0) {
 					remote = url;
-					branch = "master";
+					subPath = "maven";
 				} else {
-					branch = url.substring(0, i);
+					subPath = url.substring(0, i);
 					remote = url.substring(i + 3, url.length());
 				}
 
@@ -121,11 +123,18 @@ public class GitWagon extends StreamWagon {
 				if (!workDir.exists() || !workDir.isDirectory() || !workDir.canWrite())
 					throw new ConnectionException("Unable to create working directory");
 
+
+				File subDir = new File(workDir, subPath);
 				if (safeCheckout)
 					FileUtils.cleanDirectory(workDir);
-
-				git = new GitBackend(workDir, remote, branch, log);
+				git = new GitBackend(workDir, remote, branch, subDir, log);
 				git.pullAll();
+				if(!subDir.exists() || !subDir.isDirectory() || !subDir.canWrite()) {
+					if(!subDir.mkdir()) {
+						throw new ConnectionException("Unable to create working directory");
+					}
+				}
+
 			} catch (Exception e) {
 				throw new ConnectionException("Unable to pull git repository: " + e.getMessage(), e);
 			}
