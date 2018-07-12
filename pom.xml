@@ -4,8 +4,15 @@
 
 	<groupId>ar.com.synergian</groupId>
 	<artifactId>wagon-git</artifactId>
-	<version>0.3.1-SNAPSHOT</version>
+	<version>0.3.1</version>
 	<packaging>jar</packaging>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>synergian-repo</id>
+			<url>https://raw.github.com/synergian/wagon-git/releases</url>
+		</pluginRepository>
+	</pluginRepositories>
 
 	<name>wagon-git</name>
 
@@ -22,6 +29,10 @@
 		<developer>
 			<name>Martin Schonaker</name>
 			<email>mschonaker@gmail.com</email>
+		</developer>
+		<developer>
+			<name>Doowoong Lee</name>
+			<email>innocentevil0914@gmail.com</email>
 		</developer>
 	</developers>
 	<description>A Maven component (a wagon provider) that enables deploying artifacts in remote Git SCM repositories.</description>
@@ -60,6 +71,13 @@
 	</dependencies>
 
 	<build>
+		<extensions>
+			<extension>
+				<groupId>ar.com.synergian</groupId>
+				<artifactId>wagon-git</artifactId>
+				<version>0.2.5</version>
+			</extension>
+		</extensions>
 		<plugins>
 			<plugin>
 				<artifactId>maven-clean-plugin</artifactId>
@@ -140,7 +158,7 @@
 
 	<scm>
 		<url>https://github.com/synergian/wagon-git</url>
-		<connection>scm:git:ssh://git@github.com/synergian/wagon-git.git</connection>
+		<connection>scm:git:ssh://git@github.com:fritzprix/wagon-git.git</connection>
 	  <tag>HEAD</tag>
   </scm>
 
@@ -148,17 +166,17 @@
 		<repository>
 			<id>wagon-git-releases</id>
 			<name>Synergian Releases</name>
-			<url>git:releases://git@github.com:synergian/wagon-git.git</url>
+			<url>git:releases://git@github.com:fritzprix/wagon-git.git</url>
 		</repository>
 		<snapshotRepository>
 			<id>wagon-git-snapshots</id>
 			<name>Synergian Snapshots</name>
-			<url>git:snapshots://git@github.com:synergian/wagon-git.git</url>
+			<url>git:snapshots://git@github.com:fritzprix/wagon-git.git</url>
 		</snapshotRepository>
 		<site>
 			<id>wagon-git-site</id>
 			<name>wagon-git Github Homepage</name>
-			<url>git:gh-pages://git@github.com:synergian/wagon-git.git</url>
+			<url>git:gh-pages://git@github.com:fritzprix/wagon-git.git</url>
 		</site>
 	</distributionManagement>
 

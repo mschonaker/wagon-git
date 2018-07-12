@@ -17,6 +17,7 @@ public class GitBackend {
 	final File workDir;
 	private final String remote;
 	private final String branch;
+	final File copyDirectory;
 
 	private final ScmLogger log;
 
@@ -41,13 +42,17 @@ public class GitBackend {
 	};
 
 	public GitBackend(File workDir, String remote, String branch, ScmLogger log) throws GitException {
+		this(workDir, remote, branch, new File(workDir, "maven"), log);
+	}
+
+	public GitBackend(File workDir, String remote, String branch, File copyDirectory, ScmLogger log)  throws GitException  {
 		this.log = log;
 		this.remote = remote;
 		this.branch = branch;
 		this.workDir = workDir;
+		this.copyDirectory = copyDirectory;
 		if (!this.workDir.exists())
 			throw new GitException("Invalid directory");
-
 	}
 
 	private boolean run(String command) throws GitException {
@@ -186,7 +191,7 @@ public class GitBackend {
 
 	public void putDirectory(File sourceDirectory, String destinationDirectory) throws IOException {
 
-		FileUtils.copyDirectoryStructure(sourceDirectory, new File(workDir, destinationDirectory));
+		FileUtils.copyDirectoryStructure(sourceDirectory, new File(copyDirectory, destinationDirectory));
 
 	}
 }
